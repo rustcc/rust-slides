@@ -1,0 +1,10 @@
+{
+  "generator-reveal": {
+    "presentationTitle": "Reveal.js and Yeoman is Awesomeness",
+    "packageVersion": "1.0.0",
+    "useSass": true,
+    "deployToGithubPages": true,
+    "githubUsername": "MozillaCentroamerica",
+    "githubRepository": "rust-intro-2018"
+  }
+}

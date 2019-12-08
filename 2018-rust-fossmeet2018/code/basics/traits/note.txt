@@ -1,0 +1,11 @@
+
+Generic functions are "monomorphed" by the compiler; ie,
+two invocations of the same generic fn with parameters having
+different types will result in the compiler actually implementing
+two versions of the function specialized for each type. This
+can be easily verified by looking at the generated asm code.
+
+(https://rust.godbolt.org/ is a good way to check asm output with
+cleaned-up symbols)
+
+

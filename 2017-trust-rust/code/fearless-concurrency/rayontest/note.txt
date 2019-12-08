@@ -1,0 +1,44 @@
+Check out:
+
+https://www.youtube.com/watch?v=gof_OEv71Aw 
+(Nicholas Matsakis on Rayon)
+
+Example given in the talk:
+
+fn load_images(paths: &[PathBuf]) -> Vec<Image> {
+    paths.iter()
+         .map(|path| Image::load(path))
+         .collect()
+}
+
+---
+change:
+
+paths.iter()
+
+to:
+
+paths.par_iter()
+
+and you get to use ALL the cores!
+
+---------
+
+Now, let's say somebody modifies this to:
+
+fn load_images(paths: &[PathBuf]) -> Vec<Image> {
+    let mut pngs = 0;
+    paths.par_iter()
+         .map(|path| {
+             if path.ends_with("png") {
+                pngs += 1;
+             }
+             Image::load(path)
+         })
+         .collect()
+}
+
+----
+The code will NOT compile!
+
+

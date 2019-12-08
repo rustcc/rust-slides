@@ -1,0 +1,245 @@
+* {
+    box-sizing: border-box;
+}
+
+* {
+    --text-shadow-color: black;
+}
+
+* {
+    --china-red: #BE132D;
+    --china-red: #DE2910;
+    --china-yellow: #FFDE00;
+    --bg-color: #202024;
+    --fg-color: #C0C0D0;
+    --title-emph-color: #F74C00;
+    --main-emph-color: #F2946F;
+    --ckb-color: #3CC68A;
+    --main-emph-color: var(--china-red);
+    --ckb-color: var(--china-yellow);
+}
+
+#brson div.title,
+#brson div.title h1,
+#brson div.title a
+{
+    /*background-color: var(--china-red);
+    color: var(--china-yellow);*/
+}
+
+#brson div.title h1 {
+    color: var(--china-red);
+}
+
+#brson u {
+    color: var(--china-yellow);
+}
+
+#brson {
+    background-color: var(--bg-color);
+}
+
+#brson h1, #brson h2, #brson h3,
+#brson p,
+#brson li {
+    color: var(--fg-color);
+    text-transform: none;
+}
+
+#brson a {
+    color: var(--china-yellow);
+}
+
+#brson #s-intro sub {
+    color: var(--title-emph-color);
+    font-size: 70%;
+}
+
+#brson #s-intro a {
+    color: var(--title-emph-color);
+}
+
+#brson h2 {
+    /*color: var(--title-emph-color);*/
+}
+
+#brson h2 span.part {
+    font-size: 70%;
+    color: var(--ckb-color);
+}
+
+#brson h2 span.part-b {
+    font-size: 70%;
+    color: var(--title-emph-color);
+}
+
+#brson #s-thanks h2 {
+    color: var(--title-emph-color);
+}
+
+#brson #name-aimee {
+    color: var(--ckb-color);
+}
+
+#brson #name-brian {
+    color: var(--title-emph-color);
+}
+
+#brson li {
+}
+
+#brson p {
+    margin-bottom: 1rem;
+}
+
+#brson img {
+    background: none;
+    box-shadow: none;
+}
+
+#brson li em {
+    text-transform: uppercase;
+    color: red;
+}
+
+#brson #s-intro div.img-box img {
+    width: 100%;
+}
+
+#brson #s-intro div.img-box {
+    font-size: 80%;
+}
+
+#brson #s-intro div.img-box {
+    margin-left: 10rem;
+    margin-right: 20rem;
+}
+
+#brson #s-intro p {
+    margin: 0;
+}
+
+#brson #s-about-us div.img-box img {
+    width: 50%;
+}
+
+#brson div.big-img img {
+    margin-top: 18rem;
+}
+
+#brson #s-part-1 div.img-box img {
+    /*width: 80%;*/
+    margin-right: 20rem;
+}
+
+#brson div.center-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#brson div.center-header > *:nth-child(1) {
+    margin-top: 0;
+}
+
+#brson div.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#brson div.center > *:nth-child(1) {
+    margin-top: 0;
+}
+
+#brson div.two-box div.center > *:nth-child(1) {
+    margin-top: 0;
+}
+
+#brson #s-riscv img {
+    width: 60%;
+}
+
+#brson #s-vm h3 {
+    margin-top: 10rem;
+    margin-left: 10rem;
+    /*color: var(--ckb-color);*/
+    color: var(--bg-color);
+    text-shadow: 2px 2px 2px var(--fg-color);
+    /*text-shadow: 2px 2px 2px var(--text-shadow-color);*/
+    text-align: left;
+}
+
+#brson #s-vms-are-cool h3 {
+    margin-top: 10rem;
+    margin-left: 5rem;
+    color: var(--ckb-color);
+    text-shadow: 2px 2px 2px var(--text-shadow-color);
+    text-align: left;
+}
+
+#brson #s-risc-v-is-cool h3 {
+    margin-top: 10rem;
+    margin-right: 5rem;
+    color: var(--ckb-color);
+    text-shadow: 2px 2px 2px var(--text-shadow-color);
+    text-align: right;
+}
+
+#brson #s-vm2 h3 {
+    margin-top: 10rem;
+    margin-right: 10rem;
+    /*color: var(--ckb-color);*/
+    color: var(--bg-color);
+    text-shadow: 2px 2px 2px var(--fg-color);
+    /*text-shadow: 2px 2px 2px var(--text-shadow-color);*/
+    text-align: right;
+}
+
+#brson div.ckb-title h3 {
+    color: var(--ckb-color);
+}
+
+#brson div.ferris-title h3 {
+    color: var(--title-emph-color);
+}
+
+#brson section.logos {
+	background: linear-gradient(#222, #888);
+}
+
+#brson div.img-board {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: center;
+    height: 100%;
+	/*background: linear-gradient(#333, #BBB);*/
+}
+
+#brson div.img-board > img {
+    max-height: 180px;
+	/*max-width: 400px;*/
+	width: 100%;
+	height: auto;
+	margin: 2rem;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+#brson div.img-board > img {
+	width: auto;
+	height: 200px;
+}
+
+#brson div.img-title > img {
+    width: 100%;
+    height: auto;
+}
+
+#brson div.img-title {
+	background: linear-gradient(#222, #888);
+}

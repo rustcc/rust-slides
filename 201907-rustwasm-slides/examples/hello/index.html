@@ -1,0 +1,7 @@
+<script>
+  let importObject = {};
+  WebAssembly.instantiateStreaming(fetch('lib.wasm'), importObject)
+    .then(wasmModule => {
+      console.log(wasmModule.instance.exports.add_one(10));
+    });
+</script>

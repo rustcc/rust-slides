@@ -1,0 +1,32 @@
+
+Required: A laptop running a recent version of GNU/Linux. 
+(Ubuntu 16.04 or later / Debian Jessie or later preferred)
+
+I have experience with GNU/Linux only and may not be able to 
+troubleshoot installations on other platforms.
+
+a) 
+
+Refer: https://japaric.github.io/discovery/03-setup/README.html
+
+Install everything specified here except "itmdump".
+
+b)
+
+Refer: https://japaric.github.io/discovery/03-setup/linux.html
+
+And install all the tools specified here.
+
+(Windows instructions: https://japaric.github.io/discovery/03-setup/windows.html)
+(MacOS instructions: https://japaric.github.io/discovery/03-setup/macos.html)
+
+
+c) Install st-flash (https://github.com/texane/stlink)
+
+Refer: https://github.com/texane/stlink/blob/master/doc/compiling.md (Linux, build from source)
+
+Before building st-flash, please do:
+
+sudo apt-get install build-essential libusb-1.0-0-dev
+
+

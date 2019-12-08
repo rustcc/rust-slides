@@ -1,0 +1,9 @@
+# Site settings
+title: "Rust ISP 2019"
+email: "cis198@cis.upenn.edu"
+baseurl: "/rust-isp-2019"
+url: "http://newpavlov.github.io"
+github_username: newpavlov
+
+# Build settings
+markdown: kramdown

@@ -1,0 +1,27 @@
+[
+    "index.md",
+    "install.md",
+    "hello-world.md",
+    [
+        "cargo.md",
+        "cargo-hello-world.md",
+        "cargo-build.md"
+    ],
+    [
+        "data-types.md",
+        "data-types-2.md",
+        "data-types-3.md",
+        "data-types-4.md"
+    ],
+    "functions.md",
+    [
+        "control-flow.md",
+        "control-flow-2.md",
+        "control-flow-3.md"
+    ],
+    [
+        "links.md",
+        "links-2.md"
+    ],
+    "thanks.md"
+]

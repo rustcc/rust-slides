@@ -1,0 +1,81 @@
+digraph Dispatcher {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        labelloc = top,
+        bgcolor = "transparent",
+        nodesep = 0.1,
+        ranksep = 0,
+    ];
+
+    node [
+        fillcolor = "#aaccff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+    ];
+
+    // Label definitions
+
+    thread_pool [
+        label = <<table border="0" cellborder="0">
+            <tr><td><b>Thread Pool</b></td></tr>
+            <tr><td style="radial">core_0</td></tr>
+            <tr><td style="radial">core_1</td></tr>
+            <tr><td style="radial">...</td></tr>
+        </table>>,
+        fillcolor = "#af00af",
+        shape = "circle",
+    ];
+
+    invis_2 [label = "", style = "invis"];
+    invis_2 -> thread_pool [style = "invis"];
+
+    subgraph cluster_systems {
+        bgm [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b><font color="#af00af">C0</font> 🎶 Bgm</b></td></tr>
+            </table>>,
+        ];
+
+        input_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>⌨️ InputUpdate</b></td></tr>
+            </table>>,
+        ];
+
+        speech_bubble_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b><font color="#af00af">C1</font> 💬 SpeechBubbleUpdate</b></td></tr>
+            </table>>,
+        ];
+
+        velocity_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b><font color="#af00af">C2</font> 🌠 VelocityUpdate</b></td></tr>
+            </table>>,
+        ];
+
+        position_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>🛰️ PositionUpdate</b></td></tr>
+            </table>>,
+        ];
+
+        input_update -> velocity_update;
+        input_update -> speech_bubble_update;
+
+        velocity_update -> position_update;
+
+        // Alignment edges
+        subgraph {
+            node [style = "invis"];
+            edge [style = "invis"];
+
+            invis_0 -> velocity_update;
+            invis_0 -> invis_1;
+            bgm -> invis_1;
+        }
+    }
+}

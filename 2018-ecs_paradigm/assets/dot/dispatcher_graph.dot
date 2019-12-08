@@ -1,0 +1,81 @@
+digraph Dispatcher {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        // label = <<b>Dispatcher<br /><br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+    ];
+
+    node [
+        fillcolor = "#aaccff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+        width = 3.2,
+    ];
+
+    // Label definitions
+
+    subgraph cluster_systems {
+        bgm [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>🎶 BgmSystem</b></td></tr>
+                <tr cellspacing="0"><td align="left">Write&lt;'s, Bgm&gt;,</td></tr>
+                <tr cellspacing="0"><td align="left">&nbsp;</td></tr>
+            </table>>,
+            width = 2.2,
+        ];
+
+        input_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>⌨️ InputUpdateSystem</b></td></tr>
+                <tr cellspacing="0"><td align="left">Read&lt;'s, EventChannel&lt;KeyEvent&gt;&gt;,</td></tr>
+                <tr cellspacing="0"><td align="left">WriteStorage&lt;'s, Input&gt;,</td></tr>
+            </table>>,
+        ];
+
+        speech_bubble_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>💬 SpeechBubbleUpdateSystem</b></td></tr>
+                <tr cellspacing="0"><td align="left">ReadStorage&lt;'s, Input&gt;,</td></tr>
+                <tr cellspacing="0"><td align="left">WriteStorage&lt;'s, SpeechBubble&gt;,</td></tr>
+            </table>>,
+        ];
+
+        velocity_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>🌠 VelocityUpdateSystem</b></td></tr>
+                <tr cellspacing="0"><td align="left">ReadStorage&lt;'s, Input&gt;,</td></tr>
+                <tr cellspacing="0"><td align="left">WriteStorage&lt;'s, Velocity&gt;,</td></tr>
+            </table>>,
+        ];
+
+        position_update [
+            label = <<table border="0" cellborder="0">
+                <tr><td align="left"><b>🛰️ PositionUpdateSystem</b></td></tr>
+                <tr cellspacing="0"><td align="left">ReadStorage&lt;'s, Velocity&gt;,</td></tr>
+                <tr cellspacing="0"><td align="left">WriteStorage&lt;'s, Position&gt;,</td></tr>
+            </table>>,
+        ];
+
+        input_update -> velocity_update;
+        input_update -> speech_bubble_update;
+
+        velocity_update -> position_update;
+
+        // Alignment edges
+        subgraph {
+            node [style = "invis"];
+            edge [style = "invis"];
+
+            invis_1 [width = 2.2];
+
+            invis_0 -> velocity_update;
+            invis_0 -> invis_1;
+            bgm -> invis_1;
+        }
+    }
+
+}

@@ -1,0 +1,9 @@
+[package]
+name = "stm32f3-board2"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+f3 = "0.5.2"
+cortex-m = "0.4.3"
+cortex-m-rt = "0.3.12"

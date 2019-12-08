@@ -1,0 +1,6 @@
+
+Calling the std c math library function "fabs" from Rust.
+
+For more complex stuff, use "bindgen". 
+
+https://github.com/rust-lang-nursery/rust-bindgen

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rust in ten slides</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, center
+
+# Basic Rust Syntax
+
+### This presentation will give you a quick overview of basic Rust syntax
+
+---
+class: middle, left
+
+# Variables
+
+`let` introduces new variables:
+
+```rust
+let x = 5;
+```
+
+Variables are immutable by default
+
+```rust
+let x = 5;
+x += 1;
+```
+
+```text
+error[E0384]: cannot assign twice to immutable variable `x`
+  |     let x = 5;
+  |         - first assignment to `x`
+  |     x += 1;
+  |     ^^^^^^ cannot assign twice to immutable variable
+```
+
+in order to modify them, you need to say
+they're `mut`able:
+
+```rust
+let mut x = 5;
+x += 1;
+```
+
+---
+class: middle, left
+
+# Basic Types
+
+Rust is statically typed, but infers types for you. You can write them out if you'd like:
+
+```rust
+let x = 5;
+let x: i32 = 5;
+```
+
+Rust has a few primitive types:
+
+* **Booleans**: are *true* and *false*
+* **Integers**: are both signed and unsigned. *u8*/*i8*, *u16*/*i16*, *u32*/*i32*, *u64*/*i64*, and *u128*/*i128*.
+* **Floating point numbers**:, *f32* and *f64*
+* **Tuples**: are for grouping different types together *(i32, f64, i8)*
+* **Arrays**: that are fixed size *[u32; 3]* is the type of *[1, 2, 3]*
+* **References**: like pointers but safer. *&i32* is the type of *&5*
+* **Slices**: refer to parts of an array *&[u8]*
+* **char**: is a single Unicode Scalar Value, and uses single quotes *'🦀'*
+* **&str**: is an immutable UTF-8 string *"this is a crab: 🦀"*
+
+---
+class: middle, left
+
+# Functions
+
+Here's a small function that adds one to a number:
+
+```rust
+fn add_one(x: i32) -> i32 {
+    x + 1
+}
+```
+
+* `fn` declares a function, and the name `add_one` follows.
+* `()`s show you the parameter list; you must write the names and types of your parameters; Rust won't infer these!
+* The arrow `->` gives the return type. You can only return one thing, but don't forget, tuples work: `-> (i32, i32)`
+* The body goes inside curly braces `{}`, and lines end with a semicolon `;`
+* "everything is an expression"; so the last line is the return value, no `;`.
+
+You can use `return` explicitly if you prefer, or to return early:
+
+```rust
+fn add_one(x: i32) -> i32 {
+    return x + 1;
+}
+```
+
+---
+class: middle, left
+
+# Printing to the Screen
+
+The `println!` macro will let you print to the screen:
+
+```rust
+println!("Hello, world!");
+```
+
+You can do formatted print with `{}`:
+
+```rust
+println!("Here's a number: {} and another: {}", 42, 100);
+```
+
+You can debug print with `{:?}`:
+
+```rust
+println!("Display: {}", "hello"); // prints "Display: hello"
+println!("Debug: {:?}", "hello"); // prints "Debug: "hello""
+```
+
+---
+class: middle, left
+
+# Comments
+
+Rust has two main kinds of comments.
+
+Regular comments for your own use:
+
+```rust
+// Put whatever you'd like here, Rust doesn't care
+```
+
+And doc comments:
+
+```rust
+/// This comment documents the `foo` function.
+///
+/// You can use the `rustdoc` tool via `cargo doc` to generate
+/// HTML documentation from these comments!
+fn foo() {
+    // ...
+}
+```
+
+---
+class: middle, left
+
+# `if` expressions
+
+The `if` expression lets you do something if something is true or false,
+and `else` is there too:
+
+```rust
+if something {
+    println!("it was true!");
+} else {
+    println!("it was false");
+}
+```
+
+Because `if` is an expression, you can use it in all kinds of places:
+
+```rust
+let power = if too_powerful { 0 } else { 100 };
+```
+
+Now `power` will be `0` or `100` based on the `too_powerful` variable's value.
+
+---
+class: middle, left
+
+# `for` and `while` Loops
+
+`for` loops will let you iterate over a range or collection:
+
+```rust
+for i in 0..5 {
+    println!("{}", i);
+}
+
+let list = [1, 5, 3, 17];
+
+for i in &list {
+    println!("{}", i);
+}
+```
+
+`while` loops loop until a condition is met:
+
+```rust
+let mut done = false;
+let mut i = 0;
+
+while !done {
+    // do stuff with i
+    if i > 5 { done = true; }
+}
+```
+
+---
+class: middle, left
+
+# Structs and enums
+
+Structs let you group multiple primitive types together into one big type:
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let origin = Point {
+    x: 0,
+    y: 0,
+};
+```
+
+Enums are similar, but you can only have one of the variants at a time:
+
+```rust
+enum TrafficLight {
+    Green,
+    Yellow,
+    Red,
+}
+
+let light = TrafficLight::Green;
+```
+
+Enums are way more powerful than this, but that's for another set of slides!
+
+---
+class: middle, left
+
+# Methods
+
+Methods are like functions, but take a special `self` parameter and can be called with method syntax:
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl Point {
+    fn print(&self) {
+        println!("({}, {})", self.x, self.y);
+    }
+}
+
+let origin = Point { x: 0, y: 0 };
+
+point.print(); // prints "(0, 0)"
+```
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
+

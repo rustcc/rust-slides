@@ -1,0 +1,756 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Building a VM in Rust</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/brson-theme.css">
+    <link rel="stylesheet" href="css/theme/custom-theme.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Custom rules -->
+    <link rel="stylesheet" href="css/brson.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+
+  <body id="brson">
+    <div class="reveal">
+      <div class="slides">
+
+        <section id="s-intro">
+          <div class="two-box big-small">
+            <div class="center-header">
+              <h1>
+                Building a VM<br>in Rust<br>
+                <sub>that also runs Rust</sub>
+              </h1>
+            </div>
+            <div>
+              <div class="img-box">
+                <div>
+                  <img src="images/ferris-fencing-url.svg">
+                  <p><a href="https://www.ferrisfencing.org">ferrisfencing.org</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="notes">
+            (Aimee)<br>
+
+            Thank you for the welcome.<br>
+
+            This is a talk about our experience building a RISC-V
+            virtual machine in Rust,<br>
+
+            And then figuring out how to run Rust on that virtual machine.<br>
+
+            Before we get started, a few words about who we are<br>
+          </aside>
+        </section>
+
+        <section id="s-about-us">
+          <div class="title-two-box">
+            <div>
+              <h2>About us</h2>
+            </div>
+            <div>
+              <div class="img-box">
+                <div>
+                  <img src="images/aimee-cat.jpg"></img>
+                  <p id="name-aimee">Aimee</p>
+                </div>
+              </div>
+              <div class="img-box">
+                <div>
+                  <img src="images/brian.jpeg"></img>
+                  <p id="name-brian">Brian</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="notes">
+            (Aimee)<br>
+
+            (Brian)<br>
+          </aside>
+        </section>
+
+        <section id="s-ferris">
+          <div class="big-img">
+            <img src="images/ferris-fencing-battle-gold.svg">
+            <p><a href="https://www.ferrisfencing.org">ferrisfencing.org</a></p>
+          </div>
+
+          <aside class="notes">
+            (Aimee) boring, brainstorming, week ago<br>
+
+            (Brian) demo CKB-VM<br>
+
+            art experiment<br>
+
+            motivating example, code in talk<br>
+
+            links<br>
+
+            back to aimee<br>
+          </aside>
+        </section>
+
+        <section id="s-overview">
+          <div>
+            <h2>
+              Building a VM in Rust<br>
+              <sub>that also runs Rust</sub>
+            </h2>
+            <ul>
+              <li>Part 1: VMs, CKB-VM and RISC-V
+              <li>Part 2: Rust on CKB-VM
+            </ul>
+          </div>
+
+          <aside class="notes">
+            (Aimee)<br>
+          </aside>
+        </section>
+
+        <section id="s-part-1">
+          <div class="two-box">
+            <div class="center-header">
+              <h2>
+                <span class="part">Part 1:</span><br>
+                VMs<br>RISC-V<br>CKB-VM
+              </h2>
+            </div>
+            <div>
+              <div class="img-box">
+                <img src="images/logo-nervos-light-withname.svg">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="s-vm" data-background-image="images/virtual-machine.jpg">
+          <h3>Virtual<br>Machines</h3>
+          <!--<div class="two-box">
+            <div>
+              <div class="img-box">
+                <img src="images/virtual-machine.jpg">
+              </div>
+            </div>
+            <div class="center-header">
+              <h3>Virtual<br>Machines</h3>
+            </div>
+          </div>-->
+        </section>
+
+        <section>
+          <div class="ckb-title">
+            <h3>Why build a VM?</h3>
+            <ul>
+              <li class="fragment fade-left">Hardware Emulation
+              <li class="fragment fade-left">Runtime Platform
+              <li class="fragment fade-left">Sandboxing
+              <li class="fragment fade-left">Education
+            </ul>
+          </div>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section id="s-vms-are-cool" data-background-image="images/vms-are-cool-lego.jpg">
+          <h3>VMs are cool!</h3>
+        </section>
+
+        <section id="s-ckb" data-background-image="images/nervos-ckb-vm.png">
+        </section>
+
+        <!--<section>
+          <div class="two-box">
+            <div>
+              <div class="img-box">
+                <img src="images/vms-are-cool-lego.jpg">
+              </div>
+            </div>
+            <div class="center-header">
+              <h3>VMs are cool!</h3>
+            </div>
+          </div>
+        </section>-->
+
+        <!--<section>
+          <div>
+
+            <div>
+              <div class="img-box">
+                <img src="images/nervos-ckb-vm.png">
+              </div>
+            </div>
+            <p>
+              A general-purpose RISC-V VM,<br>built for the Nervos blockchain network.
+            </p>
+          </div>
+        </section> -->
+
+
+        <!--CKB-VM Use cases-->
+
+        <section>
+          <div class="ckb-title">
+            <h3>Blockchain VM Use Cases</h3>
+            <ul>
+              <li class="fragment fade-left">Crypto algorithm as a contract
+              <li class="fragment fade-left">Higher level languages
+              <li class="fragment fade-left">Existing blockchain VMs
+              <li class="fragment fade-left">WebAssembly
+            </ul>
+          </div>
+          <aside class="notes">
+          </aside>
+        </section>
+
+
+        <!--RISC-V-->
+
+        <section id="s-riscv">
+          <div class="big-img">
+            <img src="images/logo-risc-v-white.png">
+            <p><a href="https://www.riscv.org">riscv.org</a></p>
+          </div>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <h3>Why RISC-V?</h3>
+          </div>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <p>An open & frozen ISA</p>
+          </div>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <p>Flexible & Extensible</p>
+          </div>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <p>Language support:</p>
+              <p>Rust, C/C++, Go, Ruby,<br>Python, JavaScript …</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="s-vms-are-cool" data-background-image="images/risc-v-ecosystem.png">
+        </section>
+
+      <!--  <section>
+          <div>
+            <p>Ecosystem, industry support</p>
+            <div>
+                <div class="img-box" width="70%">
+                  <img src="images/risc-v-ecosystem.png">
+                </div>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>source: https://content.riscv.org/wp-content/uploads/2017/12/Tue0900-StateOfUnion-krste.pdf</p>
+          </aside>
+        </section> -->
+
+        <section id="s-risc-v-is-cool" data-background-image="images/risc-v-is-cool.jpg">
+          <h3>RISC-V is cool!</h3>
+        </section>
+
+        <!--<section>
+          <div class="two-box">
+            <div class="center-header">
+              <h3>RISC-V is cool!</h3>
+            </div>
+            <div>
+              <div class="img-box">
+                <img src="images/risc-v-is-cool.jpg">
+              </div>
+            </div>
+          </div>
+        </section>-->
+
+
+        <!--CKB-VM Architecture-->
+
+        <section id="s-part-2">
+          <div class="two-box">
+            <div class="center-header">
+              <h2>
+                <span class="part-b">Part 2:</span><br>
+                Rust<br>on<br>CKB-VM
+              </h2>
+            </div>
+            <div>
+              <div class="img-box">
+                <img src="images/build-a-risc-v-vm.jpg">
+              </div>
+            </div>
+          </div>
+
+          <aside class="notes">
+            (Brian)<br>
+
+            My experience<br>
+
+            Rust to RISC-V<br>
+
+            On CKB-VM<br>
+
+            RISC-V and CKB-VM are...<br>
+
+            CKB-VM is simple!<br>
+
+            Credit Xuejie Xiao at Nervos<br>
+
+            Bare-metal<br>
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h3>Part 2 Overview</h3>
+            <ul>
+              <li>Live-coding <code>main</code> on bare-metal RISC-V
+              <li>Hosting an exe on CKB-VM
+              <li>CKB-VM exe loading and instruction dispatch
+              <li>RISC-V / CKB-VM syscalls
+            </ul>
+          </div>
+
+          <aside class="notes">
+            Embarassing live coding.<br>
+
+            Hosting<br>
+
+            Exe loading<br>
+
+            Instruction dispatch<br>
+
+            Syscalls (assembly / runtime)<br>
+          </aside>
+        </section>
+
+        <section id="s-source">
+          <div>
+            <h3>Source code</h3>
+            <ul>
+              <p><a href="https://github.com/brson/ferris-fencing">https://github.com/brson/ferris-fencing</a></p>
+              <p><a href="https://github.com/nervosnetwork/ckb-vm">https://github.com/nervosnetwork/ckb-vm</a></p>
+            </ul>
+          </div>
+
+          <aside class="notes">
+            Code I use is in the ferris-fencing repo<br>
+
+            Patched ckb-vm<br>
+
+            Nightly toolchain<br>
+
+            Stall<br>
+          </aside>
+        </section>
+
+        <section id="s-redux">
+          <div class="two-box ferris-title">
+            <div class="center-header">
+              <div>
+                <h3>Ferris<br>Fencing<br>redux</h3>
+                <p><a href="https://www.ferrisfencing.org">ferrisfencing.org</a></p>
+                <p><a href="brson/ferris-fencing">github.com/<br>brson/ferris-fencing</a></p>
+              </div>
+            </div>
+            <div>
+              <div class="img-box">
+                <img src="images/ferris-fencing-blue.svg">
+              </div>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Motivating example<br>
+            Source code available<br>
+            Simple two player game<br>
+            Each player is a RISC-V bot<br>
+            2D playing grid<br>
+            Cloud sandbox<br>
+            Rules don't matter<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <h3>Quick demo</h3>
+          </div>
+
+          <aside class="notes">
+            TODO: command-line
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Live-coding</h3>
+              <p>
+                Watch me<br>
+                attempt to build Rust code<br>
+                for RISC-V<br>
+                and run it on CKB-VM
+              </p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Alternate between slides and code<br>
+
+            Slides reminders<br>
+
+            Illustrative of how to bring up the Rust runtime
+            for any architecture<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>Hosting RISC-V<br>code on CKB-VM</p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Showing the test harness<br>
+
+            Learned by reading CKB-VM source<br>
+
+            demo_rt<br>
+
+            Explain what each does<br>
+
+            Tour the load_binary and step functions<br>
+
+            ferris_fencing/src/demo_rt/main.rs<br>
+
+            cargo run -p demo_rt -- README.md<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>Naive <code>main</code></p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            ferris_fencing/src/demo_exe/main.rs<br>
+
+            Ask aimee<br>
+
+            cargo build -p demo_exe --target=riscv32imac-unknown-none-elf<br>
+
+            Target is installed (show in rustup)<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p><code>#![no_std]</code></p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Ask aimee<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p><code>[panic_handler]</code></p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Lang items<br>
+
+            Ask aimee<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>Naive <code>start</code></p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            How do I know about start?<br>
+
+            ls -lh target/riscv32imac-unknown-none-elf/debug/<br>
+
+            Run with demo_rt<br>
+
+            cargo run -p demo_rt -- target/riscv32imac-unknown-none-elf/debug/demo-exe<br>
+
+            Instruction 0<br>
+
+            ckb-vm/src/decoder.rs<br>
+
+            ~/riscv-gcc/bin/riscv32-unknown-elf-objdump -d target/riscv32imac-unknown-none-elf/debug/demo-exe<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>Correct <code>start</code></p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            _start<br>
+
+            Build - dissassemble - run - explain<br>
+
+            How do I know about start? Tried it in C?<br>
+
+            RUST_LOG=debug cargo run -p demo_rt -- target/riscv32imac-unknown-none-elf/debug/demo-exe<br>
+          </aside>
+        </section>
+
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>Running the bin</p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            TODO: objdump?<br>
+
+            TODO: what happens when run?
+          </aside>
+        </section>
+
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>Working <code>start</code></p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            How do I know about _start?<br>
+
+            Something appened<br>
+
+            Ignore illegal instruction error for now<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>WTF is <code>_start?</code></h3>
+            </div>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Coding</h3>
+              <p>What's the error?</p>
+            </div>
+          </div>
+
+          <aside class="notes">
+            ckb-vm/src/instructions/execute.rs<br>
+            ckb-vm/src/machine/mod.rs grep ecall<br>
+
+            Note syscall number, registers<br>
+
+            Conventions?<br>
+
+            End of live-coding - examples from ferris fencing<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>Syscalls in RISC-V and CKB-VM</h3>
+            </div>
+          </div>
+
+          <aside class="notes">
+            ferris-fencing/src/ckb_vm_syscall/ecall32.s<br>
+            ferris-fencing/src/ckb_vm_syscall/lib.rs<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>ckb_vm_glue</h3>
+            </div>
+          </div>
+
+          <aside class="notes">
+            ferris-fencing/src/ckb_vm_glue<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center-header">
+            <div>
+              <h3>example_bot</h3>
+            </div>
+          </div>
+
+          <aside class="notes">
+            ferris-fencing/src/example_bot<br>
+          </aside>
+        </section>
+
+        <section id="s-vm2" data-background-image="images/ruins.jpg">
+          <h3>Building a<br>Virtual Machine</h3>
+
+          <aside class="notes">
+            CKB-VM is approachable<br>
+            Loading / decoding / interpreting / runtime (syscalls)<br>
+          </aside>
+        </section>
+
+        <section id="s-further">
+          <div>
+            <h3>Further exploring</h3>
+            <ul>
+              <p><a href="https://github.com/brson/ferris-fencing">https://github.com/brson/ferris-fencing</a></p>
+              <p><a href="https://github.com/nervosnetwork/ckb-vm">https://github.com/nervosnetwork/ckb-vm</a></p>
+              <p><a href="https://github.com/nervosnetwork/ckb">https://github.com/nervosnetwork/ckb</a></p>
+            </ul>
+          </div>
+
+          <aside class="notes">
+            All I can cover here<br>
+
+            Read CKB source<br>
+
+            Back to Aimee<br>
+          </aside>
+        </section>
+
+
+        <!-- ----- -->
+
+
+        <section id="s-nervos">
+          <div class="ckb-title">
+            <h3>Nervos Network</h3>
+            <div>
+              <div class="img-box">
+                <img src="images/logo-nervos-light.svg" height="300px" width="300px">
+              </div>
+            </div>
+            <p>aimee@nervos.org</p>
+          </div>
+
+          <aside class="notes">
+            (Aimee)<br>
+          </aside>
+        </section>
+
+        <section id="s-thanks">
+          <div>
+            <h2 class="fragment fade-left">Thanks</h2>
+            <p><a href="https://www.ferrisfencing.org">ferrisfencing.org</a></p>
+            <p><a href="https://www.nervos.org">nervos.org</a></p>
+            <div>
+              <div class="img-box">
+                <img src="images/ferris-fencing-1.svg" height="300px" width="300px">
+                <img src="images/logo-nervos-light.svg" height="300px" width="300px">
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+
+      </div> <!-- class="slides" -->
+
+    </div> <!-- class="reveal" -->
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+      history: true,
+      margin: 0,
+      /*width: "100%",
+      height: "100%",*/
+      /*width: 960,
+      height: 700,*/
+      width: 1920,
+      height: 1080,
+      minScale: 0.1,
+      maxScale: 20,
+      dependencies: [
+      { src: 'plugin/markdown/marked.js' },
+      { src: 'plugin/markdown/markdown.js' },
+      { src: 'plugin/notes/notes.js', async: true },
+      { src: 'plugin/highlight/highlight.js', async: true }
+      ]
+      });
+    </script>
+  </body>
+</html>

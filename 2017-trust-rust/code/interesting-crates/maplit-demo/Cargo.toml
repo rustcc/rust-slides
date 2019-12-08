@@ -1,0 +1,7 @@
+[package]
+name = "maplit-demo"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+maplit = "1.0.0"

@@ -1,0 +1,465 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Rust in China</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/brson-theme.css">
+    <link rel="stylesheet" href="css/theme/custom-theme.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Custom rules -->
+    <link rel="stylesheet" href="css/brson.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+
+  <body id="brson">
+    <div class="reveal">
+      <div class="slides">
+
+
+
+
+
+        <section>
+          <div class="center title">
+            <div>
+              <h1>Rust in China</h1>
+              <a href="https://github.com/brson/rust-in-china">github.com/brson/rust-in-china</a>
+            </div>
+          </div>
+
+          <aside class="notes">
+            (Brian)<br>
+
+            This is a talk about what's going on in China<br>
+
+            Link to presentation materials, further reading<br>
+
+            Short talk<br>
+
+            More content than 15 min<br>
+          </aside>
+        </section>
+
+        <section id="s-about-us">
+          <div class="title-two-box">
+            <div>
+              <h2>About us</h2>
+            </div>
+            <div>
+              <div class="img-box">
+                <div>
+                  <img src="images/brian.jpeg"></img>
+                  <p id="name-brian">Brian</p>
+                </div>
+              </div>
+              <div class="img-box">
+                <div>
+                  <img src="images/aimee-cat.jpg"></img>
+                  <p id="name-aimee">Aimee</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="notes">
+            (Brian)<br>
+
+            I've asked Aimee to join me for this talk<br>
+
+            (Aimee)<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center">
+            <div>
+              <h2><u>Rust is not a success in China</u></h2>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Not a failure<br>
+
+            Adoption is low<br>
+
+            Good things happening<br>
+          </aside>
+        </section>
+
+
+        <section>
+          <div>
+            <h2>Overview</h2>
+            <ul>
+              <li>Production users
+              <li>Obstacles
+              <li>Community highlights
+              <li>Future
+            </ul>
+          </div>
+
+          <aside class="notes">
+            Rant about the state of Rust in China.<br>
+
+            <em>Disclaimer: generalizations</em><br>
+
+            Spoken w/ Chinese engineers<br>
+          </aside>
+        </section>
+
+        <section id="s-pop-chart">
+          <div class="center">
+            <div id="pop-chart" style="height: 900px; width: 1920px;"></div>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <!--<section>
+          <p>TODO: nick's tweet</p>
+        </section>-->
+
+        <section>
+          <div class="center">
+            <img src="images/me-in-china.jpg">
+          </div>
+
+          <aside class="notes">
+            Visiting PingCAP, first Chinese production user, 2017<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center">
+            <div>
+              <h2>Rust<br>production users<br>in China</h2>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Aimee will talk a bit about what some of them are doing.<br>
+
+            A number of production users today<br>
+          </aside>
+
+        </section>
+
+        <section class="logos">
+          <div>
+            <div class="img-board">
+              <img src="images/logo-alibaba.jpg" class="tall" width="300" height="300">
+              <img src="images/logo-baidu.png" width="300" height="300">
+              <img src="images/logo-bilibili.png" width="300" height="300">
+              <img src="images/logo-imtoken.png" class="tall" width="300" height="300">
+              <img src="images/logo-nervos.png" width="300" height="300">
+              <img src="images/logo-netease.png" width="300" height="300">
+              <img src="images/logo-pingcap.png" class="tall" width="300" height="300">
+              <img src="images/logo-sparkpool.svg" width="300" height="300">
+              <img src="images/logo-zhihu.png" width="300" height="300">
+            </div>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <div class="two-box small-big">
+            <div class="center img-title">
+              <img src="images/logo-baidu.png" width="300" height="300">
+            </div>
+            <div class="center">
+              <ul>
+                <li>
+                  <a href="https://github.com/apache/mesatee-sgx">Rust SGX SDK</a>
+                  - Rust in secure enclaves
+                </li>
+                <li>
+                  <a href="https://github.com/mesalock-linux/mesalink">Mesalink</a>
+                  - OpenSSL-compatible TLS
+                </li>
+                <li>
+                  <a href="https://github.com/mesalock-linux/mesabox">Mesabox</a>
+                  - BusyBox but Rust
+                </li>
+                <li>
+                  <a href="https://github.com/mesalock-linux">Mesalock Linux</a>
+                  - Linux in Rust
+                </li>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Note: links in repo<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="two-box small-big">
+            <div class="center img-title">
+              <img src="images/logo-nervos.png" width="300" height="300">
+            </div>
+            <div class="center">
+              <ul>
+                <li>
+                  <a href="http://localhost:4000/rust-in-china/README.md">CKB-VM</a>
+                  - A RISC-V VM
+                </li>
+                <li>
+                  <a href="https://github.com/nervosnetwork/ckb">CKB</a>
+                  - A blockchain network
+                </li>
+                <li>
+                  <a href="https://github.com/nervosnetwork/muta">Muta</a>
+                  - A framework for building blockchains
+                </li>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Aimee works for Nervos<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="two-box small-big">
+            <div class="center img-title">
+              <img src="images/logo-pingcap.png" width="300" height="300">
+            </div>
+            <div class="center">
+              <ul>
+                <li>
+                  <a href="https://github.com/tikv/tikv">TiKV</a>
+                  - A distributed key-value store
+                </li>
+                <li>
+                  <a href="https://github.com/tikv/raft-rs">raft-rs</a>
+                  - The raft consensus protocol
+                </li>
+                <li>
+                  <a href="https://github.com/tikv/rust-prometheus">rust-prometheus</a>
+                  - Metrics reporting
+                </li>
+                <li>
+                  <a href="https://github.com/tikv/rust-rocksdb">rust-rocksdb</a>
+                  - Bindings to RocksDB
+                </li>
+                <li>
+                  <a href="https://github.com/tikv/grpc-rs">grpc-rs</a>
+                  - Bindings to gRPC reference
+                </li>
+            </div>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+
+        <section>
+          <div class="center">
+            <h2>Obstacles to Rust in China</h2>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Obstacles to Rust in China</h2>
+
+            <ul>
+              <li>The GFW
+              <li>Inoperative Rust infrastructure
+              <li>WeChat and community building
+              <li>Engineering culture
+            </ul>
+          </div>
+
+          <aside class="notes">
+            The GFW<br>
+            WeChat. also QQ<br>
+            Engineering culture. Hacker ethos. Blue collar. 669<br>
+            Job market<br>
+            Corporations<br>
+          </aside>
+        </section>
+
+        <section>
+          <div class="center">
+            <h2>The failures<br>of the Rust team<br>in China</h2>
+          </div>
+
+          <aside class="notes">
+            _Feels_ like failure<br>
+
+            Westerners can't solve Chinese problems, community building<br>
+
+            Could have done better<br>
+
+            Didn't think about China until 2017<br>
+
+            cargo, advocacy, support training
+          </aside>
+        </section>
+
+
+        <section>
+          <div class="center">
+            <h2>Rust in China<br>community spotlight</h2>
+          </div>
+        </section>
+
+        <section>
+          <div class="center">
+            <div>
+              <h2>Community organizers</h2>
+              <ul>
+                <li>Alex Zhang
+                <li>Mike Tang
+              </ul>
+            </div>
+          </div>
+        </section>
+        
+        <section>
+          <div class="center">
+            <h2>rust.cc</h2>
+          </div>
+
+          <aside class="notes">
+            Mike Tang
+          </aside>
+        </section>
+
+        <section>
+          <div class="center">
+            <div>
+              <h2>www.rust-lang.org/zh-CN/</h2>
+              <p>
+                Alex,
+                Balthild,
+                CrLF0710,
+                Junjie,
+                Keming,
+                Oling Cat,
+                Planet6174,
+                Xidorn Quan,
+                Yiyuan,
+                baishen,
+                ltq2002gcn,
+                sora
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!--<section>
+          <div class="center">
+            <div>
+              <h2>Working crates.io mirror</h2>
+              <p>Thanks LUG @ USTC</p>
+              <p>(links in README.md)</p>
+            </div>
+          </div>
+        </section>-->
+
+        <section>
+          <div class="center">
+            <div>
+              <img src="images/logo-rustconasia-white.svg">
+            </div>
+          </div>
+        </section>
+        
+
+        <section>
+          <div>
+            <h2>Future of Rust in China</h2>
+            <ul>
+              <li>Solutions from within
+              <li>Led by a just few companies
+              <li>Please fix cargo and rustup
+              <li>WeChat vs. ?
+              <li>More outreach, training, sponsorship
+            </ul>
+          </div>
+
+          <aside class="notes">
+          </aside>
+        </section>
+
+
+
+
+        <section>
+          <div class="center title">
+            <div>
+              <h1>Rust in China</h1>
+              <a href="https://github.com/brson/rust-in-china">github.com/brson/rust-in-china</a>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Thanks<br>
+
+            Questions later<br>
+          </aside>
+        </section>
+
+
+
+        
+      </div> <!-- class="slides" -->
+
+    </div> <!-- class="reveal" -->
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+      history: true,
+      margin: 0,
+      /*width: "100%",
+      height: "100%",*/
+      /*width: 960,
+      height: 700,*/
+      width: 1920,
+      height: 1080,
+      minScale: 0.1,
+      maxScale: 20,
+      dependencies: [
+      { src: 'plugin/markdown/marked.js' },
+      { src: 'plugin/markdown/markdown.js' },
+      { src: 'plugin/notes/notes.js', async: true },
+      { src: 'plugin/highlight/highlight.js', async: true }
+      ]
+      });
+    </script>
+
+    <script src="js/canvasjs.min.js"></script>
+    <script src="js/charts.js"></script>
+  </body>
+</html>

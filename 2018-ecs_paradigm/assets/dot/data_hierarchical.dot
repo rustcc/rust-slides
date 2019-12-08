@@ -1,0 +1,64 @@
+digraph Person {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>Hierarchical data organization<br /><br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+    ];
+
+    node [
+        fillcolor = "#bbddff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+    ];
+
+    // Label definitions
+
+    address [
+        label = <
+<b>Address</b><br align="left"/>
+country: Country<br align="left"/>
+state: State<br align="left"/>
+city: String<br align="left"/>>,
+    ];
+    contact_details [
+        label = <
+<b>ContactDetails</b><br align="left"/>
+address: Address<br align="left"/>
+phone_number: PhoneNumber<br align="left"/>>,
+    ];
+    date_time [
+        label = <
+<b>DateTime</b><br align="left"/>
+year: u64<br align="left"/>
+month: u64<br align="left"/>
+day: u64<br align="left"/>
+hours: u64<br align="left"/>
+minutes: u64<br align="left"/>
+seconds: u64<br align="left"/>
+timezone: TimeZone<br align="left"/>>,
+    ];
+    person [
+        label = <
+<b>Person</b><br align="left"/>
+contact_details: ContactDetails<br align="left"/>
+date_of_birth: DateTime<br align="left"/>>,
+    ];
+    phone_number [
+        label = <
+<b>PhoneNumber</b><br align="left"/>
+country_code: String<br align="left"/>
+area_code: String<br align="left"/>>,
+    ];
+
+    // Label links
+
+    person -> contact_details;
+    person -> date_time;
+
+    contact_details -> address;
+    contact_details -> phone_number;
+}

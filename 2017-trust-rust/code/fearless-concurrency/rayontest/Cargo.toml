@@ -1,0 +1,9 @@
+[package]
+name = "rayontest"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+rayon = "0.9"
+
+

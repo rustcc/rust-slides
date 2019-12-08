@@ -1,0 +1,21 @@
+
+ 4e8:   6801            ldr     r1, [r0, #0]
+ 4ea:   f041 0108       orr.w   r1, r1, #8
+ 4ee:   6001            str     r1, [r0, #0]
+ 4f0:   6801            ldr     r1, [r0, #0]
+ 4f2:   f021 0102       bic.w   r1, r1, #2
+ 4f6:   6001            str     r1, [r0, #0]
+ 4f8:   6801            ldr     r1, [r0, #0]
+ 4fa:   f041 0104       orr.w   r1, r1, #4
+ 4fe:   6001            str     r1, [r0, #0]
+ 500:   6801            ldr     r1, [r0, #0]
+ 502:   f021 0108       bic.w   r1, r1, #8
+ 506:   6001            str     r1, [r0, #0]
+ 508:   6801            ldr     r1, [r0, #0]
+ 50a:   f041 0102       orr.w   r1, r1, #2
+ 50e:   6001            str     r1, [r0, #0]
+ 510:   6801            ldr     r1, [r0, #0]
+ 512:   f021 0104       bic.w   r1, r1, #4
+ 516:   6001            str     r1, [r0, #0]
+ 518:   e7e6            b.n     4e8 <_ZN11cortex_m_rt13reset_handler4main17h013016c728a33fddE+0x60>
+

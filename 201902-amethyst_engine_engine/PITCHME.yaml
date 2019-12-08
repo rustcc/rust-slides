@@ -1,0 +1,8 @@
+# Look-and-Feel
+logo              : assets/images/heartless.png
+code-line-numbers : true
+highlight         : sunburst
+theme-override    : assets/css/PITCHME.css
+
+# Behavior
+transition : none

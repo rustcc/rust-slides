@@ -1,0 +1,31 @@
+--------------------+-----------------------+-----------------------+
+                    |                       |                       |
+     Nobody uses    |     Older garbage     |      New garbage      |
+      any more      |                       |                       |
+     Can be freed   |   But still in use    |      Still in use     |
+                    |                       |                       |
+--------------------+-----------------------+-----------------------+
+                          ^  ^   ^                    ^     ^
+                          |  |   |                    |     |
+
+         Old threads go away or move to new the generation
+---------------+-----------------------+-----------------------+
+               |                       |                       |
+               |     Older garbage     |      New garbage      |
+               |                       |                       |
+               |   Can be freed now    |      Still in use     |
+               |                       |                       |
+---------------+-----------------------+-----------------------+
+                                           ^  ^  ^     ^
+                                           |  |  |     |
+
+             And we can start a new generation
+-----+-----------------------+-----------------------+---------------
+     |                       |                       |
+     |      Nobody uses      |      Older garbage    |   New garbage
+     |       any more        |                       |
+     |   Can be freed now    |      Still in use     |
+     |                       |                       |
+-----+-----------------------+-----------------------+---------------
+                                 ^  ^  ^     ^            ^
+                                 |  |  |     |            |

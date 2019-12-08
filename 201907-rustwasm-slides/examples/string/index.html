@@ -1,0 +1,18 @@
+<script>
+  let importObject = {};
+  WebAssembly.instantiateStreaming(fetch('lib.wasm'), importObject)
+    .then(wasmModule => {
+      const { module, instance } = wasmModule;
+      const linearMemory = instance.exports.memory;
+      const offset = instance.exports.hello();
+      const stringBuffer = new Uint8Array(linearMemory.buffer, offset,
+        instance.exports.get_len());
+
+      let str = '';
+      for (let i=0; i<stringBuffer.length; i++) {
+        str += String.fromCharCode(stringBuffer[i]);
+      }
+
+      console.log(str);
+    });
+</script>

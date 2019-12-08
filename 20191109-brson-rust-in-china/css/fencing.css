@@ -1,0 +1,44 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#screen {
+    height: 100%;
+}
+
+* {
+    --bg-color: #222;
+    --wall-color: #444;
+    --floor-color: red;
+}
+
+#floor {
+    height: 2%;
+    background-color: var(--floor-color);
+}
+
+#field {
+    height: 98%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background-color: var(--wall-color);
+}
+
+#field > div {
+    width: 8%;
+    /*padding: 5px;*/
+    display: flex;
+    background-color: var(--bg-color);
+}
+
+#field img {
+    width: 100%;
+    height: auto;
+    margin-top: auto;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,5 @@
+Use the type system to "Make illegal states unrepresentable"
+
+https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/
+
+

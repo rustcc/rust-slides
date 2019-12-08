@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Rust / Blockchain</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/custom.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Custom rules -->
+	<link rel="stylesheet" href="css/rifb.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+	  var link = document.createElement( 'link' );
+	  link.rel = 'stylesheet';
+	  link.type = 'text/css';
+	  link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+	  document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+  </head>
+  <body id="rifb">
+	<div class="reveal">
+	  <div class="slides">
+
+		<section id="s-chain" class="title-box">
+		  <div class="left-box">
+			<div><h1>Rust<br>is for Block&#8203;chain</h1></div>
+			<div></div>
+		  </div>
+
+		  <aside class="notes">
+			Hi. Thanks for the introduction, $NAME.<br>
+
+			Happy to be invited.<br>
+		  </aside>
+		</section>
+
+		<section id="s-me" class="title-box">
+		  <div class="left-img-box">
+			<div>
+			  <h1>This guy →</h1>
+			  <div>Brian Anderson</div>
+			  <div>brson.github.io</div>
+			</div>
+			<img src="images/me.jpg">
+		  </div>
+
+		  <aside class="notes">
+			My name is Brian.<br>
+			
+			Rust guru.<br>
+
+			Mozilla.<br>
+
+			Not a blockchain expert. Rust blockchain cheerleader.<br>
+
+			Soft talk - next ones will be deeper<br>
+
+			History with blockchain projects.<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>What up?</h1>
+
+		  <aside class="notes">
+			Talk to a lot of blockchain companies.<br>
+
+			Blog post.<br>
+
+			Libra. What is libra?<br>
+
+			Audience?<br>
+
+			Show Rust community the world of Rust blockchain<br>
+
+			Lots of research / Lots of info<br>
+
+			No links!! At the end. Many links.<br>
+
+			Anecdotes.<br>
+
+			Why Rust / Why blockchain?<br>
+
+			Unrehearsed. Extemporateous. Questions?<br>
+
+			Short time. 20 minutes. Let me know<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>A domain for Rust</h1>
+
+		  <aside class="notes">
+			Anecdote about finding Rust's killer domain.<br>
+
+			Anecdote about parallel evolution.<br>
+
+			At least 33 companies.<br>
+
+			More than I thought.<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>Why Rust<br>for blockchain?</h1>
+
+		  <aside class="notes">
+			Less interesting to me<br>
+
+			Performance and reliability<br> Duh.
+
+			Server-side distributed systems.<br>
+
+			Portable client code.<br>
+
+			Smart contracts!<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>Why blockchain<br>for Rust??</h1>
+
+		  <aside class="notes">
+			Diversity<br>
+
+			Ideas<br>
+
+			Code<br>
+
+			Money<br>
+		  </aside>
+		</section>
+
+		<section id="s-logos">
+		  <!-- blockchian Rust conference sponsors -->
+
+		  <div>
+			<img src="images/logo-bitfury.svg" width="1000" height="1000">
+			<img src="images/logo-codechain.svg" width="1000" height="1000">
+			<img src="images/logo-cryptape.png" width="1000" height="1000">
+			<img src="images/logo-dfinity.svg" width="1000" height="1000">
+			<img src="images/logo-intraverse.png" width="1000" height="1000">
+			<img src="images/logo-near.png" width="1000" height="1000">
+			<img src="images/logo-oasis.svg" width="1000" height="1000">
+			<img src="images/logo-parity.svg" width="1000" height="1000">
+			<img src="images/logo-poa.svg" width="1000" height="1000">
+			<img src="images/logo-rlay.png" width="1000" height="1000">
+			<img src="images/logo-salt.svg" width="1000" height="1000">
+			<img src="images/logo-snz.svg" width="1000" height="1000">
+			<img src="images/logo-solana.png" width="1000" height="1000">
+			<img src="images/logo-thegraph.png" width="1000" height="1000">
+			<img src="images/logo-transparent.svg" width="1000" height="1000">
+			<img src="images/logo-zcash.svg" width="1000" height="1000">
+		  </div>
+
+		  <aside class="notes">
+			Anecdote about how Rust is financed.<br>
+
+			19 conferences.<br> 6 this year.
+
+			28% of Rust<br>
+			conference sponsorship in 2019 comes from blockchain companies.<br>
+
+			15 different companies<br>
+
+			Parity :heart:<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>Badass Rust projects</h1>
+		  <div>(from blockchain companies)</div>
+
+		  <aside class="notes">
+			Main part of the talk.<br>
+
+			Gushing.<br>
+
+			Lots more I don't know about<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>VMs in Rust</h1>
+
+		  <div class="fragment">
+			EVM · WASM · RISC-V · eBPF · x86
+		  </div>
+
+		  <aside class="notes">
+			VMs! in Rust! Systems programming!<br>
+
+			(click for fragment)<br>			
+
+			EVM<br>
+			
+			wasmi - parity<br>
+
+			ckb-vm - nervos - unfortunate name<br>
+
+			rbpf - solana<br>
+
+			sputnikvm - etcddevteam<br>
+
+			qx86-rs - qtum - subset of x86<br>
+		  </aside>
+		</section>
+
+		<section id="s-dalek" class="title-box">
+		  <div class="right-img-box">
+			<img src="images/dalek.png">
+			<div>
+			  <h1>Dalek</h1>
+			</div>
+		  </div>
+
+		  <aside class="notes">
+			Rust and crypto<br>
+			
+			Many projects. Best crypto<br>
+
+			Elliptic curve crypto<br>
+
+			Zero-knowledge proofs, bulletproofs, constant-time eval<br>
+
+			Isis Lovecruft and Henry de Valence<br>
+
+			Not sure why - used in blockchain projects<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>Endless Rust crypto</h1>
+
+		  <aside class="notes">
+			bn - pairing crypto - Zcash<br>
+
+			signatory - digital signature - Tinderment<br>
+
+			yubihsm - yubikey interop - Tinderment<br>
+
+			(What is yubikey?)<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>Yeah, there's more...</h1>
+		  <aside class="notes">
+			Not just VMs and crypto<br>
+
+			BFT protocols, encodings<br>
+
+			Brave adblock<br>
+
+			Stuff I don't know<br>
+		  </aside>
+		</section>
+
+		<section id="s-angels" class="title-box">
+		  <div class="right-img-box">
+			<img src="images/angel.jpg">
+			<div>
+			  <h1>How to help</h1>
+			</div>
+		  </div>
+
+		  <aside class="notes">
+			Rust -> Rust blockchain communities<br>
+
+			Rust blockchain -> Rust communities<br>
+
+			Companies desperate for experts<br>
+
+			Be your best self<br>
+
+			Thank a conference sponsor<br>
+		  </aside>
+		</section>
+
+		<section>
+		  <h1>Closing thoughts</h1>
+
+		  <aside class="notes">
+			Rust started out great at...<br>
+
+			Firefox<br>
+
+			Now it's great for a lot of things<br>
+		  </aside>
+		</section>
+
+		<section id="s-chain-2">
+		  <div class="left-box">
+			<div><h1>Rust<br>is for Block&#8203;chain</h1></div>
+			<div>
+			  <span>https://github.com<br>/brson/<br>rust-is-for-blockchain</span>
+			</div>
+		  </div>
+		</section>
+
+	  </div>
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+	  // More info about config & dependencies:
+	  // - https://github.com/hakimel/reveal.js#configuration
+	  // - https://github.com/hakimel/reveal.js#dependencies
+	  Reveal.initialize({
+	  history: true,
+	  margin: 0,
+	  /*width: "100%",
+	  height: "100%",*/
+	  /*width: 960,
+	  height: 700,*/
+	  width: 1920,
+	  height: 1080,
+	  minScale: 0.1,
+	  maxScale: 20,
+	  dependencies: [
+	  { src: 'plugin/markdown/marked.js' },
+	  { src: 'plugin/markdown/markdown.js' },
+	  { src: 'plugin/notes/notes.js', async: true },
+	  { src: 'plugin/highlight/highlight.js', async: true }
+	  ]
+	  });
+	</script>
+  </body>
+</html>

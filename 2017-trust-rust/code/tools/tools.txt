@@ -1,0 +1,21 @@
+
+1) rustup
+
+2) cargo
+
+3) rustfmt
+
+4) clippy (lint tool) https://github.com/rust-lang-nursery/rust-clippy
+
+5) unit tests (cargo test)
+
+6) benchmarking (cargo bench)
+
+7) rustdoc (cargo doc)
+
+8) Other types of testing:
+     a) QuickCheck (property based testing): https://github.com/BurntSushi/quickcheck
+     b) Fuzzing: https://users.rust-lang.org/t/announcing-afl-rs-0-2-bindings-for-american-fuzzy-lop/13981
+
+
+9) Vscode + RLS plugin as IDE

@@ -1,0 +1,11 @@
+.reveal section img {
+    margin: 0px 0px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.reveal section {
+    font-size: 0.9em;
+    vertical-align: middle;
+}

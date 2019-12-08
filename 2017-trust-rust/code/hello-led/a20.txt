@@ -1,0 +1,70 @@
+
+Simulating an embedded systems program
+--------------------------------------
+
+Let's say we have a vector which contains representation
+of N Light Emitting Diodes.
+
+let v = vec![Led(1), Led(2), Led(3), Led(4)];
+
+We need a "running lights" display. This can be  done in a 
+minute using a loop and simple integer arithmetic.
+
+Let's try it in a different way, just for fun!
+
+Once you are done with, you will see some surprising
+results!
+
+----
+
+In our "simulation", we will represent the LED's like this:
+
+let v = vec![1, 2, 3, 4]; 
+
+Here is one way to go about getting a "running lights" display.
+
+First, generate pairs like this:
+
+(1, 2), (2, 3), (3, 4), (4, 1)
+
+Now:
+
+OFF 1, ON 2
+
+OFF 2, ON 3
+
+OFF 3, ON 4
+
+OFF 4, ON 1
+
+repeat:
+
+OFF 1, ON 2
+
+....
+
+------------------------
+
+Your program simply needs to print OFF 1, ON 2, etc in a loop.
+
+This can be done using: 
+
+zip (refer a12.rs) , 
+skip (a13.rs), 
+chain (a14.rs), 
+iter::once (a16.rs), 
+for_each (a18.rs, a19.rs)
+
+Note1: Here is how you write an infinite loop in Rust:
+
+loop {
+
+
+}
+
+Note2:  try println!("{:?}", ...) for printing.
+
+
+Note3: Please write your code in a21.rs
+
+

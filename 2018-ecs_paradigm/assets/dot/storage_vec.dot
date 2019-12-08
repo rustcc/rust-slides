@@ -1,0 +1,37 @@
+digraph VecStorage {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>VecStorage<br /><br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+    ];
+
+    node [
+        fillcolor = "#aaccff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+        width = 5;
+    ];
+
+    // Label definitions
+
+    renderables [
+        label = <<table border="0" cellborder="0">
+            <tr><td align="left"><b>Renderables</b></td></tr>
+            <tr cellspacing="0">
+                <td align="left">data: </td>
+                <td border="1" bgcolor="#eecc99">&nbsp;R0&nbsp;</td>
+                <td border="1" bgcolor="#eecc99">&nbsp;R1&nbsp;</td>
+                <td border="1" bgcolor="#eecc99">&nbsp;R2&nbsp;</td>
+                <td border="1" bgcolor="#eecc99">&nbsp;R3&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">    </td>
+                <td border="1" bgcolor="#dddddd" style="dotted">    </td>
+                <td border="1" bgcolor="#dddddd" style="dotted">    </td>
+                <td border="1" bgcolor="#dddddd" style="dotted">    </td>
+            </tr>
+        </table>>,
+    ];
+}

@@ -1,0 +1,15 @@
+[package]
+name = "launchpad"
+version = "0.1.0"
+
+[dependencies]
+cortex-m = "0.3.0"
+volatile-register = "0.2.0"
+
+[dependencies.cortex-m-rt]
+features = ["abort-on-panic"]
+version = "0.3.3"
+
+[profile.release]
+debug = true
+lto = true

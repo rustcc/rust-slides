@@ -1,0 +1,9 @@
+[package]
+name = "lazy_static-demo"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+maplit = "1.0.0"
+lazy_static = "0.2.11"
+

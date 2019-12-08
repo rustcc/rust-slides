@@ -1,0 +1,8 @@
+[package]
+name = "broken"
+version = "0.1.0"
+authors = ["Michal 'vorner' Vaner <vorner@vorner.cz>"]
+edition = "2018"
+
+[dependencies]
+crossbeam-utils = "~0.6"

@@ -1,0 +1,5 @@
+.tmp/
+/dist
+.ccls-cache
+lockfree-non-gc/*.svg
+atomics/*.svg

@@ -1,0 +1,41 @@
+digraph HashMapStorage {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>HashMapStorage<br /><br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+    ];
+
+    node [
+        fillcolor = "#aaccff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+        width = 5;
+    ];
+
+    // Label definitions
+
+    bounds [
+        label = <<table border="0" cellborder="0">
+            <tr><td align="left"><b>Bounds  </b></td></tr>
+            <tr cellspacing="0">
+                <td align="left">key/data: </td>
+                <td border="1" bgcolor="#dddddd" colspan="2" style="dotted">    </td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;4:B4&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" colspan="2" style="dotted">    </td>
+                <td style="invis">    </td>
+                <td style="invis">    </td>
+                <td style="invis">    </td>
+                <td style="invis">    </td>
+                <td style="invis">    </td>
+            </tr>
+        </table>>,
+    ];
+
+    edge [style = "invis"];
+
+    bounds;
+}

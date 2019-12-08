@@ -1,0 +1,132 @@
+digraph World {
+    bgcolor = "transparent";
+
+    subgraph cluster_Entities {
+        bgcolor = "#f5f5f5";
+        fontname = "consolas";
+        fontsize = 16;
+        label = <<b>World<br /></b>>;
+        labelloc = top;
+
+        node [
+            fillcolor = "#bbddff",
+            fontname = "consolas",
+            fontsize = 11,
+            shape = box,
+            style = filled,
+            width = 1.5,
+        ];
+
+        edge [
+            style = invis,
+        ];
+
+        subgraph {
+
+            edge [
+                dir = "both",
+                style = "solid",
+                color = "#0000af",
+                fontname = "consolas",
+                fontsize = 12,
+                arrowhead = "vee",
+                arrowtail = "vee",
+            ];
+
+            subgraph cluster_Storages {
+                pencolor = transparent;
+
+                label = "";
+
+                node [
+                    style = "setlinewidth(0)",
+                    width = 2.3,
+                    fontsize = 13,
+                ];
+
+                edge [
+                    dir = "both",
+                    style = "solid",
+                    color = "#0000af",
+                    fontname = "consolas",
+                    fontsize = 12,
+                    arrowhead = "vee",
+                    arrowtail = "vee",
+                ];
+
+                storage_0 [label = <<b>Render Storage</b>>];
+                storage_1 [label = <<b>Position Storage</b>>];
+
+                storage_0 -> storage_1 [label = <<b>  join()</b>>];
+            };
+
+            subgraph cluster_Player {
+                fontname = "consolas";
+                fontsize = 12;
+                label = <<b>Player<br /></b>>;
+                labelloc = top;
+                labeljust = l;
+                style = dotted;
+
+                player_render [label = "R0"];
+                player_position [label = "P0"];
+
+                player_render -> player_position;
+            };
+
+            subgraph cluster_Monster {
+                fontname = "consolas";
+                fontsize = 12;
+                label = <<b>Monster<br /></b>>;
+                labelloc = top;
+                labeljust = l;
+                style = dotted;
+
+                monster_render [label = "R1"];
+                monster_position [label = "P1"];
+
+                monster_render -> monster_position;
+            };
+
+            subgraph cluster_SpeechBubble {
+                fontname = "consolas";
+                fontsize = 12;
+                label = <<b>Speech Bubble<br /></b>>;
+                labelloc = top;
+                labeljust = l;
+                style = dotted;
+
+                edge [color = "#af0000", style = "dotted"];
+
+                speech_bubble_render [label = "R2"];
+                speech_bubble_0 [label = "", style = dashed];
+
+                speech_bubble_render -> speech_bubble_0;
+            };
+
+            subgraph cluster_Map {
+                fontname = "consolas";
+                fontsize = 12;
+                label = <<b>Map<br /></b>>;
+                labelloc = top;
+                labeljust = l;
+                style = dotted;
+
+                edge [color = "#af0000", style = "dotted"];
+
+                map_render [label = "R3"];
+                map_0 [label = "", style = dashed];
+
+                map_render -> map_0;
+            };
+
+        }
+
+        top [style = invis, width = 0, height = 0];
+        top -> storage_0;
+        top -> player_render;
+        top -> monster_render;
+        top -> speech_bubble_render;
+        top -> map_render;
+    }
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rust in ten slides</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, center
+
+# Strings in Rust
+
+### Learn a bunch about strings
+
+---
+class: middle, left
+
+## `char`, the primitive character type
+
+Rust has a primitive type for a single character, `char`.
+
+```rust
+let heart = '❤';
+```
+
+However, this isn't *technically* a character, but a [Unicode Scalar
+Value](https://www.unicode.org/glossary/#unicode_scalar_value). This means
+that some things are a single `char`, but others aren't:
+
+```rust
+let eye_in_speech_bubble = '👁️‍🗨️';
+```
+
+```bash
+error: character literal may only contain one codepoint
+ --> src/main.rs:2:32
+  |
+2 |     let eye_in_speech_bubble = '👁️‍🗨️';
+  |                                ^^^^
+```
+
+What looks like a character to you may not be one to Unicode. More on this later.
+This also means that `char` is *always* four bytes, not one like in C.
+
+---
+class: middle, left
+
+# `&str` the primitive "string slice"
+
+Rust also has a built-in string type: `&str`:
+
+```rust
+let s = "hello world";
+```
+
+`&str`s are immutable, and are, under the hood, a pointer to the start of the
+string, and a length. This means we can slice up strings without allocating
+new ones!
+
+```rust
+let s = "hello world";
+let hello = &s[..5]; // "hello"
+let world = &s[6..]; // "world"
+```
+
+Both `hello` and `world` are new `&str`s that refer to the first one, `s`.
+
+> Note: A range like `..5` means "from the start to index 5" and one like
+> `2..` means "from index 2 till the end".
+
+---
+class: middle, left
+
+# A bit about UTF-8
+
+Strings in Rust are UTF-8 encoded, and contain a lot of Unicode-based functionality out of the box.
+
+However, UTF-8 is a variable-width encoding. This means that a `&str` is **not** a list of `char`,
+like you might assume at first. `char`s are four bytes each, so for example, consider this string:
+
+```rust
+let s = "hi";
+```
+
+Here's how it'd be laid out in memory, both as `&str` is, and if `&str` were made up of `char`s:
+
+| index  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|--------|---|---|---|---|---|---|---|---|
+| `&str` | h | i |   |   |   |   |   |   |
+| `char` | 0 | 0 | 0 | h | 0 | 0 | 0 | i |
+
+The `&str` is only two bytes, but the list of `char` would be eight!
+
+---
+class: middle, left
+
+### `String` is an owned mutable string
+
+If you need to modify some string data, you'll want to create a `String`.
+
+There are... a lot of ways to do this, as strings implement a ton of traits:
+
+* `s.to_string()` is considered idiomatic, as it's very direct
+* `String::from(s)` is sometimes used with literals, as it looks nicer
+* `s.to_owned()` works too, as `String` is the owned variant of `&str`
+* `s.into()` can work as well, since everything that implements `From` implements `Into`
+
+```rust
+// this works
+let mut s = "hello".to_string();
+
+// so does this
+let mut s = String::from("hello");
+
+s.push_str(" world");
+
+println!("{}", s); // prints "hello world";
+```
+
+Beware of the bikeshed!
+
+---
+class: middle, left
+
+# `String`s and capacity
+
+While `&str`s are a pointer and a length, `String`s need to manage the memory they own,
+and therefore are *three* `usize`s in size: a pointer, a length, and a capacity. This lets
+a `String` request one big chunk of memory, so it doesn't need to allocate every time
+it's modified.
+
+```rust
+let mut s = String::from("hi");
+
+// prints 2 - 2
+println!("{} - {}", s.len(), s.capacity());
+
+s.push('!');
+
+// prints 3 - 4; the capacity doubled!
+println!("{} - {}", s.len(), s.capacity());
+
+s.push('!');
+
+// prints 4 - 4; no need to expand this time
+println!("{} - {}", s.len(), s.capacity());
+```
+
+---
+class: middle, left
+
+# `Deref` and strings
+
+`String` implements `Deref<Target=str>`, which means that you can pass a `&String` to
+something expecting a `&str`, and it will Just Work:
+
+```rust
+fn takes_str(s: &str) {
+    // ...
+}
+
+let s = String::from("hello");
+
+takes_str(&s);
+```
+
+Just throw an `&` on it!
+
+---
+class: middle, left
+
+## Accepting strings as a parameter
+
+Given the `Deref` impl, you should generally accept `&str`s as arguments, so that
+your users can use `&str`s and `String`s both. However, if you want to accept even
+more types, and don't mind a complex type signature, you can use `AsRef`:
+
+```rust
+fn complicated<T>(s: T)
+where
+    T: AsRef<str>,
+{
+    let s = s.as_ref(); // s is a &str
+}
+
+let s = "hello";
+complicated(s);
+
+let s = String::from("hello");
+complicated(s); // no need for the &
+```
+
+But this tradeoff isn't worth it most of the time.
+
+---
+class: middle, left
+
+# You can't index strings
+
+Thanks to UTF-8 being variable-length, and the assumption that `[]` is always `O(1)`,
+you can't use `[]` to access the nth character of a string or anything like that:
+
+```rust
+let s = "hi";
+
+s[1]; // in some langauges, this is 'i'
+```
+
+```text
+error[E0277]: the trait bound `str: std::ops::Index<{integer}>` is not satisfied
+ --> src/main.rs:4:1
+  |
+4 | s[0];
+  | ^^^^ the type `str` cannot be indexed by `{integer}`
+```
+
+You gotta decide if you want the nth byte, unicode scalar value, or grapheme cluster,
+and then use the API for the correct one.
+
+> Note: Grapheme cluster support isn't really in the standard library; check out
+> the [`unicode-segmentation` crate](https://crates.io/crates/unicode-segmentation).
+
+---
+class: middle, left
+
+# Strings and `+`
+
+Since `&str`s are immutable, and don't own their memory, you can't add two of
+them with `+`:
+
+```rust
+let x = "hey " + "there";
+```
+
+```text
+error[E0369]: binary operation `+` cannot be applied to type `&str`
+```
+
+It will work if the left hand side is a `String`; as then `+` takes
+ownership, adds the right hand side to it, and then gives ownership back.
+This can get tedious, especially if you're trying to chain `+`. Consider
+`format!` instead:
+
+```rust
+let x = format!("{}{}{}", 1, 2, 3);
+```
+
+As a bonus, note that these numbers aren't strings; you don't need to stringify them first.
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
+

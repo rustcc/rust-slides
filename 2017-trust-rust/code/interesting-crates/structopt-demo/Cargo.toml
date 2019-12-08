@@ -1,0 +1,10 @@
+[package]
+name = "structopt-demo"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+structopt = "0.1.0"
+structopt-derive = "0.1.0"
+
+

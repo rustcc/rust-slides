@@ -1,0 +1,122 @@
+digraph DenseVecStorage {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>DenseVecStorage<br /><br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+        nodesep = 0,
+        ranksep = 0,
+    ];
+
+    node [
+        fillcolor = "#aaccff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+        width = 5;
+    ];
+
+    // Label definitions
+
+    positions [
+        label = <<table border="0" cellborder="0">
+            <tr><td align="left"><b>Positions  </b></td></tr>
+            <tr cellspacing="0">
+                <td align="left">lookup: </td>
+                <td border="1" bgcolor="#eecc99">0</td>
+                <td border="1" bgcolor="#eecc99">1</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">&nbsp;</td>
+            </tr>
+            <tr cellspacing="0">
+                <td align="left">data: </td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;P0&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;P1&nbsp;</td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">   </td>
+            </tr>
+        </table>>,
+    ];
+
+    velocities [
+        label = <<table border="0" cellborder="0">
+            <tr><td align="left"><b>Velocities  </b></td></tr>
+            <tr cellspacing="0">
+                <td align="left">lookup: </td>
+                <td border="1" bgcolor="#eecc99">0</td>
+                <td border="1" bgcolor="#eecc99">1</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">&nbsp;</td>
+            </tr>
+            <tr cellspacing="0">
+                <td align="left">data: </td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;V0&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;V1&nbsp;</td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">   </td>
+            </tr>
+        </table>>,
+    ];
+
+    inputs [
+        label = <<table border="0" cellborder="0">
+            <tr><td align="left"><b>Inputs     </b></td></tr>
+            <tr cellspacing="0">
+                <td align="left">lookup: </td>
+                <td border="1" bgcolor="#eecc99">0</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99">1</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" style="dashed">&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">&nbsp;</td>
+                <td border="1" bgcolor="#dddddd" style="dotted">&nbsp;</td>
+            </tr>
+            <tr cellspacing="0">
+                <td align="left">data: </td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;I0&nbsp;</td>
+                <td border="1" bgcolor="#eecc99" colspan="2">&nbsp;I2&nbsp;</td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">    </td>
+                <td style="invis" colspan="2">   </td>
+            </tr>
+        </table>>,
+    ];
+
+    edge [style = "invis"];
+
+    positions -> velocities -> inputs;
+}

@@ -1,0 +1,40 @@
+#content {
+    font-size: 1.2rem;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+h2 {
+    font-size: 1.3em;
+}
+
+h2, h3 {
+    margin-top: 1.2em;
+}
+
+.left-img {
+    float: left;
+    padding-right: 1em;
+}
+
+.left-img > p {
+    margin: 0;
+}
+
+.clear {
+    clear: both;
+}
+
+hr {
+    page-break-after: always;
+    page-break-before: always;
+    clear: both;
+}
+
+.title {
+    font-size: 130%;
+    padding-top: 4em;
+    text-align: center;
+}

@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/reveal.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/theme/black.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/lib/css/zenburn.min.css'>
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.2/css/all.css'>
+  <link rel='stylesheet' href='css/style.css'>
+</head>
+<body>
+  <div class='reveal'>
+    <div class='slides'>
+      <section>
+        <h1>Rust and WebAssembly</h1>
+        <p>MozMeetup Lima 07-2019</p>
+        <small>
+          <a href="http://twitter.com/mozillaperu">
+            <i class='fab fa-twitter'></i>
+            mozillaperu
+          </a>
+        </small>
+      </section>
+      <section>
+        <h2>who I am?</h2>
+        <li class='fragment'><a href="http://github.com/ccarruitero">ccarruitero</a></li>
+        <li class='fragment'>Mozillian</li>
+        <li class='fragment'>Open Source Contributor</li>
+        <li class='fragment'>software developer</li>
+      </section>
+      <section>
+        <img class='moz-logo' src='https://www.mozilla.org/media/protocol/img/logos/mozilla/black.40d1af88c248.svg' />
+      </section>
+      <section data-background='https://raw.githubusercontent.com/ccarruitero/rust_talk/master/slides/pictures/comunidad.jpg'>
+        <img class='moz-logo' src='https://www.mozilla.org/media/protocol/img/logos/mozilla/black.40d1af88c248.svg' />
+				<blockquote>
+          a global community of people who believe that <strong>openness</strong>, <strong>innovation</strong>, and <strong>opportunity</strong> are key to the continued health of the Internet.
+        </blockquote>
+      </section>
+      <section>
+        <h1>rust + wasm </h1>
+        <img src='https://rustwasm.github.io/assets/rustwasm.png' />
+      </section>
+      <section>
+        <h3>wasm</h3>
+        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Web_Assembly_Logo.svg/220px-Web_Assembly_Logo.svg.png' />
+        <p class='fragment'>
+          binary format for a virtual machine that can run on web <span class='fragment'>, but not designed strictly for web</span>
+        </p>
+      </section>
+      <section>
+        <h1>why</h1>
+        <li class='fragment'>fast, efficient, and portable</li>
+        <li class='fragment'>readable and debuggable</li>
+        <li class='fragment'>safe</li>
+        <li class='fragment'><a href='https://www.w3.org/community/webassembly/'>open web standard</a></li>
+      </section>
+      <section>
+        <img src='https://i2.wp.com/storage.googleapis.com/blog-images-backup/1*4ZMcCrF95AUvVzJ4S6Lo-g.png?resize=1351%2C669&ssl=1' />
+      </section>
+      <section>
+        <h3>would replace js?</h3>
+        <p class='fragment'>
+          <code>wasm <3 js</code>
+        </p>
+      </section>
+      <section>
+        <h1>how it works</h1>
+        <img class='fragment' src='https://research.mozilla.org/files/2018/03/2018.02.22.WASM-diagram1-600x290.png' data-image-source='https://research.mozilla.org/webassembly/' />
+      </section>
+      <section>
+        <h3>Not only C | C++ | Rust</h3>
+        <p class='fragment'><a href='https://github.com/appcypher/awesome-wasm-langs'>wasm languages</a></p>
+      </section>
+      <section>
+        <h3>wat</h3>
+        <img class='fragment' src='images/wat.png' />
+        <p class='fragment'><a href='http://webassembly.github.io/spec/core/text/index.html'>spec</a></p>
+      </section>
+      <section>
+        <h3>Assembly Script</h3>
+        <img class='fragment' src='images/assemblyscript.png' />
+        <p class='fragment'><a href='https://assemblyscript.org'>assemblyscript.org</a></p>
+      </section>
+      <section>
+        <img src='https://mir-s3-cdn-cf.behance.net/project_modules/disp/fe36cc42774743.57ee5f329fae6.gif' />
+      </section>
+      <section>
+        <h3>rust compiling to wasm</h3>
+        <code class='fragment hljs rust' style='font-size: 30px;'>
+          rustc src/main.rs --target=wasm32-unknown-unknown
+        </code>
+      </section>
+      <section>
+        <h3>using in js</h3>
+        <img class='fragment' src='images/instantiate.png' />
+        <img class='fragment' src='images/instantiate_streaming.png' />
+      </section>
+      <section>
+        <h3>other web api interfaces</h3>
+        <li class='fragment'>Module</li>
+        <li class='fragment'>Instance</li>
+        <li class='fragment'>Table</li>
+        <li class='fragment'>Memory</li>
+      </section>
+      <section>
+        <img src='https://raw.githubusercontent.com/rust-lang/www.rust-lang.org/master/static/images/wasm-ferris.png' />
+      </section>
+      <section>
+        <a href='https://github.com/rustwasm/wasm-bindgen'><i class='fab fa-github'></i>
+        rustwasm/wasm-bindgen
+        </a>
+        <p class='fragment'>
+        more easy interactions between wasm modules and js
+        </p>
+      </section>
+      <section>
+        <img src='images/wasm-bindgen.png' />
+      </section>
+      <section>
+        <a href='https://github.com/rustwasm/wasm-pack'><i class='fab fa-github'></i>
+        rustwasm/wasm-pack
+        </a>
+        <p class='fragment'>wasm workflow tool!</p>
+      </section>
+      <section>
+        <img src='https://media.giphy.com/media/sIaMWJqrkdppm/giphy.gif' />
+      </section>
+      <section>
+        <h3>binary toolkit</h3>
+        <p><a href='https://github.com/webassembly/wabt'>webassembly/wabt</a></p>
+      </section>
+      <section>
+        <img src='https://wasi.dev/polyfill/WASI-small.png' />
+      </section>
+      <section>
+        <h3>WASI</h3>
+        <p class='fragment'>API for use outside web</p>
+      </section>
+      <section>
+        <h3><a href='https://wasmer.io/'>WASMER</a></h3>
+        <p class='fragment'>Universal WebAssembly runtime</p>
+      </section>
+      <section>
+        <h3><a href='https://wapm.io/'>WAPM</a></h3>
+        <p class='fragment'>wasm package manager</p>
+      </section>
+      <section>
+        <h3>what's next</h3>
+        <p class='fragment'><a href='https://webassembly.org/docs/future-features/'>Future Features</a></p>
+        <li class='fragment'><a href='https://github.com/WebAssembly/proposals/issues/12'>ECMAScript module integration</a></li>
+        <li class='fragment'><a href='https://github.com/WebAssembly/proposals/issues/16'>support garbage collection languages</a></li>
+      </section>
+      <section>
+        <h2>references</h2>
+        <li><a href='https://developer.mozilla.org/en-US/docs/WebAssembly'>WebAssembly MDN docs</a></li>
+        <li><a href='https://github.com/wasmerio/awesome-wasi'>Awesome WASI</a></li>
+        <li><a href='https://github.com/webassembly/wasi'>WASI repo</a></li>
+        <li><a href='https://github.com/xuu/wasm-tetris'>wasm-tetris</a></li>
+      </section>
+
+      <section>
+        <h1>Thanks!</h1>
+        <p class='fragment'>
+          <a href='https://github.com/mozillaperu'><i class='fab fa-github'></i></a>
+          <a href='https://twitter.com/mozillaperu'><i class='fab fa-twitter'></i></a>
+          <a href=''><i class='fab fa-discord'></i></a>
+          mozillaperu
+        </p>
+      </section>
+    </div>
+  </div>
+  <script src='js/highlight.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/js/reveal.min.js'></script>
+  <script src='js/highlight-plugin.js'></script>
+  <script src='js/popup-info.js'></script>
+  <script src='js/expand.js'></script>
+  <script>
+    Reveal.initialize();
+		hljs.initHighlightingOnLoad();
+  </script>
+</body>
+</html>

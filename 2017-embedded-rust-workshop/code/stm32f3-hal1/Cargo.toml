@@ -1,0 +1,10 @@
+[package]
+name = "stm32f3-hal1"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+stm32f30x-hal = "0.1.2"
+
+cortex-m = "0.4.3"
+cortex-m-rt = "0.3.12"

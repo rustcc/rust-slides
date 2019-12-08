@@ -1,0 +1,6 @@
+
+Refer:
+
+http://pramode.in/2017/03/22/rust-means-never-having-to-explicitly-free-resources/
+
+

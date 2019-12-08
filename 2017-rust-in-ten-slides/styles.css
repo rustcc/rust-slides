@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+body {
+    font-family: 'Fira Sans';
+}
+
+.remark-code, .remark-inline-code {
+    font-family: 'Source Code Pro';
+}
+
+blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+}
+
+blockquote:before {
+    color: #ccc;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+}
+
+blockquote p {
+    display: inline;
+}
+
+table {
+    border: solid 1px #333;
+    border-spacing: 0;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table thead th {
+    background-color: #ccc;
+    border: solid 1px #ccc;
+    color: #333;
+    padding: 10px;
+}
+
+table tbody td {
+    border: solid 1px #ccc;
+    color: #333;
+    padding: 10px;
+}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rust in ten slides</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, center
+
+# Getting started with Rust
+
+### This presentation will help you get Rust installed, demonstrate some neat tools, and show you "hello world"
+
+---
+class: middle, left
+
+## Installing Rust
+
+The best way to install Rust is with [rustup](https://www.rustup.rs/), a Rust
+version manager. To install it type:
+
+```bash
+$ curl https://sh.rustup.rs -sSf | sh
+```
+
+To keep your rust up-to-date with the latest release of rust,
+type:
+
+```bash
+$ rustup update
+```
+
+To check which version of Rust you have type:
+
+```bash
+$ rustc --version
+```
+
+---
+class: middle, left
+
+## cargo
+
+Cargo is a tool that helps you develop Rust programs. It does several things:
+
+- Runs tasks: `cargo build` (compile your app), `cargo test` (test your app), `cargo run` (run your app)
+- Start a project: `cargo new`, `cargo init`
+
+Cargo is also the package manager for Rust. This means that you can
+use Cargo to install and manage bits of other people's code.
+
+- A program or library is called a "crate".
+- A package contains one or more crates.
+- You can find Crates on http://crates.io
+- You list the Crates you want to use in the `Cargo.toml` file
+- Your app keeps track of what crates you are using in the `Cargo.lock` file
+
+---
+class: middle, left
+
+## Setting up a Project
+
+Creating a new project is easy!
+
+1. Type `cargo new --bin name-of-my-project`
+  * Use `--lib` if you are writing a library
+2. `cd` into the new `name-of-my-project` directory
+
+This will create several files and folders for you automatically:
+
+- `Cargo.toml`: metadata about your project and its dependencies
+- `.gitignore`: ignores compiled files built by Rust
+- `src/lib.rs` or `src/main.rs`: where your Rust code goes
+
+---
+class: middle, left
+
+## `lib.rs` vs `main.rs`
+
+There are 2 main types of projects you can make in Rust: a library and not
+a library.
+
+If you are writing a <strong>library</strong>, it means you intend for your
+code to be used in someone else's application as a crate or module.
+If you want to do this, you should use a `lib.rs`.
+
+If you are writing a <strong>not library</strong>, it means that you'd like
+to write code that compiles into a binary that someone can run. If you
+want to do this, you need to use a `main.rs`. Inside the `main.rs` you
+should have a `main` function that looks like this:
+
+```rust
+fn main() {
+  // your app code goes here
+}
+```
+
+---
+class: middle, left
+
+## `rustfmt`
+
+The `rustfmt` tool integrates with Cargo and can format your code for you! To
+install it:
+
+```bash
+$ rustup component add rustfmt-preview
+```
+
+And to use it:
+
+```bash
+$ cargo fmt
+```
+
+Cargo will re-write your files with the newly formatted code.
+
+---
+class: middle, left
+
+## Hello, world!
+
+If you generate a new program:
+
+```bash
+$ cargo new hello-world
+$ cd hello-world
+```
+
+Cargo will make `src/main.rs` a "Hello World" program for you!
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+Remember, you can run it with `cargo run`:
+
+```bash
+$ cargo run
+    Compiling hello-world v0.1.0 (file:///C:/hello-world)
+Finished dev [unoptimized + debuginfo] target(s) in 2.6 secs
+ Running `target\debug\hello-world.exe`
+Hello, world!
+```
+
+---
+class: middle, left
+
+## Basic Syntax
+
+If we look at "hello world":
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+* `fn` declares a function. In this case, our function is named `main`. `main` will
+  be called when your program starts.
+* The empty parenthesis means that `main` takes no parameters.
+* Function bodies go in curly braces: `{}`
+* The `println!` macro (the `!` means it's a macro) prints stuff to the screen!
+* Strings go inside double quotes `""`
+* Lines end with a semicolon `;`
+
+Try adding another call to `println!` with a second message!
+
+---
+class: middle, left
+
+## `cargo check`
+
+If you want the compiler to check your work, but you don't plan on actually running
+your program, you can use `cargo check`. It's faster than `cargo build`:
+
+```bash
+$ cargo build
+   Compiling hello-world v0.1.0 (file:///C:/hello-world)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
+$ cargo check
+   Compiling hello-world v0.1.0 (file:///C:/hello-world)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.85 secs
+```
+
+For "hello world" that's not much, but on real projects it really adds up!
+
+---
+class: middle, left
+
+## Learning More
+
+There are other "Rust in ten slides" presentations too, but you
+may also find these resources useful!
+
+- The Rust Docs, https://doc.rust-lang.org/
+- The Rust Book, https://doc.rust-lang.org/book/
+- into_rust Screencasts, http://intorust.com/
+- The Rust Play Ground, https://play.rust-lang.org/
+- Rust by Example, http://rustbyexample.com/
+- Rust on exercism.io, http://exercism.io/languages/rust
+- New Rustacean Podcast, http://www.newrustacean.com/
+      
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
+

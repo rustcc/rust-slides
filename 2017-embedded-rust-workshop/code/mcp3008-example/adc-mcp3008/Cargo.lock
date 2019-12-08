@@ -1,0 +1,23 @@
+[[package]]
+name = "adc-mcp3008"
+version = "0.1.0"
+dependencies = [
+ "embedded-hal 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "embedded-hal"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "nb"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[metadata]
+"checksum embedded-hal 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "c6e76f7b2a02d6d2a909bbd96e500ca31a8d58b86f7b1a4e97eded61581cc54b"
+"checksum nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "69f380b5fe9fab8c0d7a6a99cda23e2cc0463bedb2cbc3aada0813b98496ecdc"

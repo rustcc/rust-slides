@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   viewBox="0 0 32 32"
+   class="logo-emblem"
+   version="1.1"
+   id="svg41">
+  <metadata
+     id="metadata45">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs37">
+    <linearGradient
+       id="logo-gradient-standard"
+       x1="0.49999964"
+       y1="31.5"
+       x2="31.499993"
+       y2="0.50000681"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0322583,0,0,1.0322579,-0.5161294,-0.51612924)">
+      <stop
+         offset="0%"
+         style="stop-color:#7f41ef;stop-opacity:1"
+         id="stop2" />
+      <stop
+         offset="100%"
+         style="stop-color:#4f29d0;stop-opacity:1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="logo-gradient-white"
+       x1="0"
+       y1="1"
+       x2="1"
+       y2="0">
+      <stop
+         offset="0%"
+         style="stop-color:#fff;stop-opacity:1"
+         id="stop7" />
+      <stop
+         offset="100%"
+         style="stop-color:#fff;stop-opacity:1"
+         id="stop9" />
+    </linearGradient>
+    <linearGradient
+       id="logo-pride"
+       x1="0.1"
+       y1="0.9"
+       x2="0.9"
+       y2="0.1">
+      <stop
+         offset="0%"
+         style="stop-color:#7f41ef;stop-opacity:1"
+         id="stop12" />
+      <stop
+         offset="16.6%"
+         style="stop-color:#7f41ef;stop-opacity:1"
+         id="stop14" />
+      <stop
+         offset="16.6%"
+         style="stop-color:#41a5ef;stop-opacity:1"
+         id="stop16" />
+      <stop
+         offset="33.3%"
+         style="stop-color:#41a5ef;stop-opacity:1"
+         id="stop18" />
+      <stop
+         offset="33.3%"
+         style="stop-color:#63ac56;stop-opacity:1"
+         id="stop20" />
+      <stop
+         offset="50%"
+         style="stop-color:#63ac56;stop-opacity:1"
+         id="stop22" />
+      <stop
+         offset="50%"
+         style="stop-color:#f8dd56;stop-opacity:1"
+         id="stop24" />
+      <stop
+         offset="66.6%"
+         style="stop-color:#f8dd56;stop-opacity:1"
+         id="stop26" />
+      <stop
+         offset="66.6%"
+         style="stop-color:#f7a207;stop-opacity:1"
+         id="stop28" />
+      <stop
+         offset="83.3%"
+         style="stop-color:#f7a207;stop-opacity:1"
+         id="stop30" />
+      <stop
+         offset="83.3%"
+         style="stop-color:#d92929;stop-opacity:1"
+         id="stop32" />
+      <stop
+         offset="100%"
+         style="stop-color:#d92929;stop-opacity:1"
+         id="stop34" />
+    </linearGradient>
+  </defs>
+  <ellipse
+     ry="14.372881"
+     rx="14.37288"
+     cy="16"
+     cx="15.999999"
+     id="path832"
+     style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.69999999;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <path
+     d="M 15.999999,6.735e-6 A 16,16 0 0 0 -6.15e-7,16 16,16 0 0 0 15.999999,31.999993 16,16 0 0 0 32.000001,16 16,16 0 0 0 15.999999,6.735e-6 Z m -1.816534,3.149209965 3.907261,2.479838 0.657257,4.141114 -1.350806,0.9092713 -1.08468,9.53428 -2.455646,1.100794 -1.633062,-2.062501 -1.122981,-12.5725706 z m 8.191535,4.9213648 3.006047,4.1330375 -3.679434,13.096809 -3.870969,-5.766145 -0.887096,0.399196 1.012094,-8.915315 3.336694,-2.2439572 z m -11.39113,10.5746005 2.467743,3.110859 -0.439517,5.629047 -2.379032,-0.407272 -2.7217751,-7.330625 z m 6.633064,1.637086 3.552421,5.292353 -4.881051,2.372978 -2.691529,-0.461697 0.437499,-5.596784 z"
+     style="fill:url(#logo-gradient-standard);stroke-width:1"
+     id="path39" />
+</svg>

@@ -1,0 +1,27 @@
+{
+  "name": "Rust intro",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "grunt": "^1.0.0",
+    "grunt-sass": "^2.0.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "load-grunt-tasks": "^3.5.2",
+    "grunt-build-control": "^0.7.1",
+    "grunt-coffeelint": "0.0.16",
+    "coffeelint": "^1.16.0"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MozillaCentroamerica/rust-intro-2018.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}

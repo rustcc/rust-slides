@@ -1,0 +1,47 @@
+warning: unused variable: `b`
+  --> d.rs:60:10
+   |
+60 |     let  b = Book::new(
+   |          ^
+   |
+   = note: #[warn(unused_variables)] on by default
+   = note: to avoid this warning, consider using `_b` instead
+
+warning: struct is never used: `WritingCompletedBook`
+ --> d.rs:8:1
+  |
+8 | struct WritingCompletedBook {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: #[warn(dead_code)] on by default
+
+warning: struct is never used: `EditingCompletedBook`
+  --> d.rs:14:1
+   |
+14 | struct EditingCompletedBook {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct is never used: `ProofReadingCompletedBook`
+  --> d.rs:20:1
+   |
+20 | struct ProofReadingCompletedBook {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function is never used: `write`
+  --> d.rs:34:1
+   |
+34 | fn write(b: Book) -> WritingCompletedBook {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function is never used: `edit`
+  --> d.rs:42:1
+   |
+42 | fn edit(b: WritingCompletedBook) -> EditingCompletedBook {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function is never used: `proofread`
+  --> d.rs:50:1
+   |
+50 | fn proofread(b: EditingCompletedBook) -> ProofReadingCompletedBook {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

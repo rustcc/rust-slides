@@ -1,0 +1,9 @@
+[package]
+name = "mcp3008-example"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+linux-embedded-hal = "0.1.0"
+adc-mcp3008 = { path = "adc-mcp3008" }
+

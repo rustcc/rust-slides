@@ -1,0 +1,72 @@
+digraph GenerationalArena {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>Generational Arena<br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+        newrank = true,
+        nodesep = 0,
+        ranksep = 0,
+    ];
+
+    node [
+        fillcolor = "#aaccff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+    ];
+
+    // Label definitions
+
+    subgraph cluster_arena {
+        label = "";
+        bgcolor = "#aaccff";
+
+        edge [style = "invis"]
+
+        {
+            rank = "same";
+
+            node [fillcolor = "#eecc99", width = 1.7, height = 0.8];
+
+            e_4 [label = "Free {\l  next: None\l}\l"];
+            e_3 [label = "Occupied {\l  generation: 0,\l  data: T,\l}\l"];
+            e_2 [label = "Occupied {\l  generation: 0,\l  data: T,\l}\l"];
+            e_1 [label = "Occupied {\l  generation: 0,\l  data: T,\l}\l"];
+            e_0 [label = "Occupied {\l  generation: 0,\l  data: T,\l}\l"];
+        }
+
+        items [label = "items:\l", penwidth = "0"];
+        {
+            node [width = 3.0, height = 0.1];
+            free_list_head [
+                label = <<table border="0" cellborder="0" cellpadding="0" align="left">
+                <tr><td><font color="#666666">// Vec index to insert element</font></td></tr>
+                <tr><td>free_list_head: Some(4)       </td></tr>
+                </table>>,
+                penwidth = "0",
+            ];
+
+            generation [
+                label = <<table border="0" cellborder="0" cellpadding="0" align="left">
+                <tr><td><font color="#666666">// Generation to insert element</font></td></tr>
+                <tr><td>generation: 0                 </td></tr>
+                </table>>,
+                penwidth = "0",
+            ];
+
+            len [
+                label = <<table border="0" cellborder="0" cellpadding="0" align="left">
+                <tr><td><font color="#666666">// Length of vec              </font></td></tr>
+                <tr><td>len: 5                        </td></tr>
+                </table>>,
+                penwidth = "0",
+            ];
+        }
+
+        items -> free_list_head -> generation -> len;
+    }
+
+}

@@ -1,0 +1,9 @@
+[package]
+name = "rust-vs-go-slides"
+version = "0.1.0"
+authors = ["Jacky Zhen <jacky.s.zhen@gmail.com>"]
+
+[dependencies]
+yew = { git = "https://github.com/DenisKolodin/yew", rev="b957f8778ebb3ce88a6d10dfb41f04a4e44d6640" }
+pulldown-cmark = "0.1.2"
+stdweb = "0.4.8"

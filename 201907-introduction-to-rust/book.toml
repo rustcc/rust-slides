@@ -1,0 +1,19 @@
+[book]
+authors = ["Sylvain Wallez"]
+multilingual = false
+src = "src"
+title = "Introduction to Rust"
+
+[output.html]
+theme = "src/theme"
+additional-css = ["src/media/style.css"]
+
+[output.html.search]
+enable = false
+
+[output.html.playpen]
+editable = true
+
+[build]
+create-missing = true
+build-dir = "docs"

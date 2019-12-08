@@ -1,0 +1,30 @@
+digraph World {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>EC Data Organization<br />(simplified)<br /><br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+    ];
+
+    node [
+        fillcolor = "#f5f5f5",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+    ];
+
+    // Label definitions
+
+    world [
+        label = <<table border="0" cellborder="0">
+            <tr><td align="left"><b>World</b></td></tr>
+            <tr cellspacing="0"><td align="left">contact_details: </td><td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#aaccff" rowspan="4">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td></tr>
+            <tr cellspacing="0"><td align="left">date_of_births : </td><td border="1" bgcolor="#eecc99">&nbsp;</td>                                                        <td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td><td border="1" bgcolor="#eecc99">&nbsp;</td></tr>
+            <tr cellspacing="0"><td></td></tr>
+            <tr cellspacing="0"><td></td></tr>
+            <tr cellspacing="0"><td colspan="4" align="right"><font face="Arial" point-size="10"><b>Person</b></font></td></tr>
+        </table>>,
+    ];
+}

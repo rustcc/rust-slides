@@ -1,0 +1,73 @@
+digraph InterfaceInheritance {
+    graph [
+        fontname = "Arial",
+        fontsize = 16,
+        label = <<b>Interface Inheritance<br /></b>>,
+        labelloc = top,
+        bgcolor = "transparent",
+        splines = "polyline",
+    ];
+
+    node [
+        fillcolor = "#bbddff",
+        fontname = "consolas",
+        fontsize = 11,
+        shape = box,
+        style = filled,
+    ];
+
+    // Label definitions
+
+    subgraph cluster_interfaces {
+        pencolor = transparent;
+        label = "";
+
+        node [fillcolor = "#ffee77"];
+        edge [style = "invis"];
+
+        renderable [label = <<b>Renderable</b><br align="left"/>>];
+        position [label = <<b>Positionable</b><br align="left"/>>];
+        velocity [label = <<b>Movable</b><br align="left"/>>];
+        input [label = <<b>InputControlled</b><br align="left"/>>];
+        bounds [label = <<b>Bounded</b><br align="left"/>>];
+    }
+
+    player [label = <<b>Player</b><br align="left"/>>];
+    monster [label = <<b>Monster</b><br align="left"/>>];
+    speech_bubble [label = <<b>Speech<br />Bubble</b><br align="left"/>>];
+    map [label = <<b>Map</b><br align="left"/>>];
+
+    // Label links
+
+    edge [dir = "back", arrowtail = "empty", style = "dashed"];
+
+    renderable -> player;
+    position -> player;
+    velocity -> player;
+    input -> player;
+
+    subgraph cluster_non_player {
+        label = "";
+        pencolor = "transparent";
+
+        subgraph GreyedOut {
+            edge [color = "#0000003f"];
+
+            renderable -> monster;
+            position -> monster;
+            velocity -> monster;
+
+            renderable -> speech_bubble;
+            input -> speech_bubble;
+        }
+
+        subgraph DarkRed {
+            edge [color = "#880000"];
+
+            renderable -> map;
+            bounds -> map;
+        }
+    }
+
+
+}

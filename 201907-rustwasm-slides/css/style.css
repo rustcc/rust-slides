@@ -1,0 +1,23 @@
+.libs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.libs li {
+  list-style: none;
+  float: left;
+  margin: 0.5rem;
+  max-width: 250px;
+}
+
+.info {
+  color: black;
+}
+
+.moz-logo {
+  width: 350px;
+}
+
+.title {
+  font-size: 10rem;
+}

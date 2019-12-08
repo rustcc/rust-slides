@@ -1,0 +1,9 @@
+[package]
+name = "tm4c123-raw"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+
+cortex-m = "0.4.3"
+cortex-m-rt = "0.3.12"

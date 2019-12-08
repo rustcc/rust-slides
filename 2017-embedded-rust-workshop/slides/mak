@@ -1,0 +1,6 @@
+pandoc -s -t beamer $1.md  -o $1.pdf
+
+evince $1.pdf
+
+
+

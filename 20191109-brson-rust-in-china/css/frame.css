@@ -1,0 +1,32 @@
+* {
+    --column-size: 10%;
+    --bg-color: #222;
+}
+
+html {
+    height: 100%;
+    background-color: var(--bg-color);
+}
+
+body {
+    height: 100%;
+}
+
+#frame {
+    display: grid;
+    grid-template-rows: 20% 79%;
+    height: 100%;
+}
+
+#frame > div:nth-child(1) {
+    background-color: gray;
+}
+
+#frame > div:nth-child(2) {
+    height: 100%;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+}

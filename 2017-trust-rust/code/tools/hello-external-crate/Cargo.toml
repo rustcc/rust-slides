@@ -1,0 +1,8 @@
+[package]
+name = "hello-external-crate"
+version = "0.1.0"
+authors = ["Pramode <mail@pramode.in>"]
+
+[dependencies]
+rand = "0.3.18"
+
