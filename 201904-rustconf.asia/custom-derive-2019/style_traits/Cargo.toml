@@ -1,0 +1,12 @@
+[package]
+name = "style_traits"
+version = "0.1.0"
+authors = ["Xidorn Quan <me@upsuper.org>"]
+license = "MPL-2.0"
+edition = "2018"
+publish = false
+
+[lib]
+path = "lib.rs"
+
+[dependencies]

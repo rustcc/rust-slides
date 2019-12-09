@@ -1,0 +1,94 @@
+<!doctype html>
+<!-- Source:https://github.com/vshymanskyy/blynk-library-js/blob/master/examples/browser/webpage.html  -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Blynk test</title>
+  <meta name="description" content="">
+  <meta name="author" content="Volodymyr Shymanskyy">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <form id="howto" action="">
+    <ol>
+      <li>Go to project settings and to get the Auth Token</li>
+      <li>Paste your Auth Token and connect!</li>
+    </ol>
+
+    Auth token: <input id="auth" type="text" required> 
+    IP address: <input id="ip" type="text" required> 
+
+    <input id="btnConnect" type="button" value="Connect"><br><br>  
+  </form>
+  
+  <form id="control" action="">
+    
+    Blynk is running<br>
+    <textarea id="output" style="width:500px;height:300px;"></textarea><br>
+    <input id="clear" type="button" value="Clear"><br>
+  </form>
+
+
+  <script src="jquery.min.js"></script>
+  <script src="blynk-browser.js"></script>
+  
+  <script type="text/javascript">
+  
+    var log = function(msg) {
+      var output = $("#output");
+      output.val(output.val() + msg + "\n");
+      output.scrollTop(output[0].scrollHeight - output.height());
+    }
+    
+    var initBlynk = function() {
+      $("#control").show();
+      $("#howto").hide();
+    
+      var auth = $("#auth").val();
+      var ip = $("#ip").val();
+      // var blynk = new Blynk.Blynk(auth);
+      // For custom WsClient connection:
+      var blynk = new Blynk.Blynk(auth, {
+        connector: new Blynk.WsClient({
+          addr: ip, port:8080, path: '/'
+        })
+      });
+     
+      var v0 = new blynk.VirtualPin(0);
+      var v1 = new blynk.VirtualPin(1);
+      v0.on('write',function(param){
+        log("V0: " + param);
+      })
+      v1.on('write',function(param){
+        log("V1: " + param);
+      })
+      
+      $('#clear').click(function() {
+        $("#output").val("");
+      });
+      blynk.on('connect', function() {
+        $("#status").text("Connected");
+        log("Blynk ready. Sending sync request...");
+        blynk.syncAll();
+      });
+      blynk.on('disconnect', function() {
+        $("#status").text("Disconnected");
+        log("Blynk disconnected.");
+      });
+    };
+    
+    $(function () {
+      $('#btnConnect').click(initBlynk);
+      $("#control").hide();
+      $("#output").val("");
+      $("#auth").val("");
+    });
+  </script>
+</body>
+</html>

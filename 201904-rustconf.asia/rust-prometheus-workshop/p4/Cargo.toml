@@ -1,0 +1,10 @@
+[package]
+name = "p4"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+actix-web = "1.0.0-alpha"
+prometheus = "0.5"
+lazy_static = "1.3"
+evmap = "4.2.2"

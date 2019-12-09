@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+
+	<title> Stackful Coroutine Async Story in Rust </title>
+
+	<meta name="description" content="Another rust async story">
+	<meta name="author" content="Xudong-Huang">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/reveal.css">
+	<link rel="stylesheet" href="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script><link rel="stylesheet" type="text/css" href="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/paper.html">
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]--><script type="text/javascript" src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/marked.js"></script><script type="text/javascript" src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/markdown.js"></script><script type="text/javascript" src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/highlight.js"></script><script type="text/javascript" src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/search.js"></script><script type="text/javascript" src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/zoom.js"></script><script type="text/javascript" src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/notes.js"></script>
+<style type="text/css">.hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}</style></head>
+
+<body style="transition: -webkit-transform 0.8s ease 0s;">
+
+	<div class="reveal slide center has-vertical-slides has-horizontal-slides ready" role="application" data-transition-speed="default" data-background-transition="fade" style="">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(1.22743);">
+			<section style="top: 114px; display: block;" class="present">
+				<h1>Stackful Coroutine in Rust</h1>
+				<h3>Another async story</h3>
+				<p>
+					<small>Created by <a href="https://github.com/Xudong-Huang">Xudong-Huang</a> </small>
+				</p>
+				<aside class="notes">
+					Different with the offical FUTURES which is stackless
+				</aside>
+			</section>
+
+			<section data-markdown="" data-markdown-parsed="true" style="top: 198px; display: block;" class="future" aria-hidden="true" hidden=""><h2 id="about-me">About me</h2>
+<ul>
+<li>My name is 黄旭东</li>
+<li>eariler rust user</li>
+<li>work in SDAG team (DAG base blockchain)</li>
+</ul>
+</section>
+
+			<section data-markdown="" data-markdown-parsed="true" style="top: 143px; display: block;" class="future" aria-hidden="true" hidden=""><h2 id="agenda">Agenda</h2>
+<ul>
+<li>Stackful Generator</li>
+<li>Stackful Coroutine</li>
+<li>Async Io</li>
+<li>Sync Primitives</li>
+<li>Timer Management<aside class="notes"><p>stackful coroutine is implmemented based stackful generator</p>
+</aside></li>
+</ul>
+</section>
+
+			<section data-markdown="" data-markdown-parsed="true" style="top: 143px; display: none;" aria-hidden="true" class="future" hidden=""><h2 id="agenda---continued">Agenda - continued</h2>
+<ul>
+<li>Coroutine Cancellation</li>
+<li>Deal with contentions</li>
+<li>join! and select!</li>
+<li>Difference with Futures</li>
+<li>Conclusion<aside class="notes"><p>the gernal blocking combination logic: join! and select!</p>
+</aside></li>
+</ul>
+</section>
+
+			<section style="top: 0px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 0px; display: none;"><h2 id="stackful-generator">Stackful Generator</h2>
+<ul>
+<li>generator is a special function with multiple return values<pre><code class="language-rust hljs"><span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">type</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">Generator</span></span></span></span>&lt;<span class="hljs-symbol"><span class="hljs-symbol">'a</span></span>, A, T&gt; = <span class="hljs-built_in"><span class="hljs-built_in">Box</span></span>&lt;GeneratorImpl&lt;<span class="hljs-symbol"><span class="hljs-symbol">'a</span></span>, A, T&gt;&gt;;</code></pre>
+</li>
+<li><code>send</code>/<code>yield</code> would switch stack context <pre><code class="language-rust hljs">  <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> <span class="hljs-keyword"><span class="hljs-keyword">mut</span></span> g = Gn::new_scoped(|<span class="hljs-keyword"><span class="hljs-keyword">mut</span></span> s| {
+      s.yield_(<span class="hljs-number"><span class="hljs-number">17</span></span>); <span class="hljs-comment"><span class="hljs-comment">//--&gt; `yield` switch stack to caller</span></span>
+                    <span class="hljs-comment"><span class="hljs-comment">//--&gt; `send` switch stack back from caller</span></span>
+      <span class="hljs-keyword"><span class="hljs-keyword">return</span></span> <span class="hljs-number"><span class="hljs-number">42</span></span>;    <span class="hljs-comment"><span class="hljs-comment">//--&gt; `return` finish the generator</span></span>
+                    <span class="hljs-comment"><span class="hljs-comment">//    and switch stack back to caller</span></span>
+  });
+  <span class="hljs-built_in"><span class="hljs-built_in">assert_eq!</span></span>(g.send(()), <span class="hljs-number"><span class="hljs-number">17</span></span>); <span class="hljs-comment"><span class="hljs-comment">// run the generator</span></span>
+  <span class="hljs-built_in"><span class="hljs-built_in">assert_eq!</span></span>(g.send(()), <span class="hljs-number"><span class="hljs-number">42</span></span>); <span class="hljs-comment"><span class="hljs-comment">// run the generator again</span></span>
+  <span class="hljs-built_in"><span class="hljs-built_in">assert_eq!</span></span>(g.is_done(), <span class="hljs-literal"><span class="hljs-literal">true</span></span>); <span class="hljs-comment"><span class="hljs-comment">// the generator is done</span></span>
+  <span class="hljs-comment"><span class="hljs-comment">// g.for_each(|v| println!("{}", v); // print 17 and 42</span></span></code></pre>
+<aside class="notes"><p>It defines the passed parameter type A and the 
+return type T, of course it will have multiple return points in the 
+generator.
+The lifetime 'a is the closure liftetime that you passed in when 
+creating the generator. Normally it's static. Let's just ignore it
+right now. The core API is the send and yield pair that would switch 
+context back and forth.
+the context here include a small stack allocated on the heap and all 
+registers when you leave the generator. so next time you can
+switch back and resume the last running state.
+This is a simple example of generator.</p>
+</aside></li>
+</ul>
+</section>
+
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="context-management">Context management</h2>
+<ul>
+<li>thread local context stack and chain generators<div style="text-align: center;"><img src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/context_stack_gen.png" style="background:none; border:none; box-shadow:none;"></div>
+<aside class="notes"><p>Under the cover is a thread local context stack.
+ On top of it is always the current generator that are running. So you 
+can easily
+find the context where to save and restore registers and generator 
+stack.
+When you run your code in normal thread, the context must be the 
+thread-root at the bottom which is init in the thread local construct.
+When you invoke a generator it will push the generator context on top 
+the context stack, and when yield out, it just pop out the generator
+contuext. So you can chain generator calls in this manner.
+In the picture we show 
+thread-&gt;generator1-&gt;generator2-&gt;generator3.
+We also show the function frames in generator3's stack. generator could 
+call aribitory functions. and we can yield from any function frame
+point to the generator caller.</p>
+</aside></li>
+</ul>
+</section>
+
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="stackful-generator-key-features">stackful generator key features</h2>
+<ul>
+<li>detect current context type</li>
+<li><code>send</code> and <code>yield</code> with parameters</li>
+<li>yield internal stack refs</li>
+<li>always yield to caller<aside class="notes"><p>Some key features of stackful generator.</p>
+<ol>
+<li>we can detect the current running context. when you are running code in thread, the top of
+the context stack is just the thread-root which contains a null generator stack. thread is using it's own system thread.</li>
+<li>Send and Yield can take parameters. this is very usefully in corouinte implmentation.</li>
+<li>we can yield generator internal stack refs. because when you yield out the generator stack is still holding and waiting
+for another resume.</li>
+<li>we always yield to caller, just like function return to caller. This is a diffrent behavior compared with coroutine.</li>
+</ol>
+</aside></li>
+</ul>
+</section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="stackful-coroutine">Stackful Coroutine</h2>
+<ul>
+<li>coroutine is a special thread (user space / light)</li>
+<li>scheduler running on multi-thread</li>
+<li>semantic blocking is not real blocking</li>
+<li>call API without directly yield</li>
+<li>keep the same interface as std library<aside class="notes"><ol>
+<li>coroutine is just a special user space thread. It's very light to create and destroy, very fast to resume and suspend.</li>
+<li>and it can be scheduled on multiple thread.</li>
+<li>blocking a coroutine is not a real block just like blocking a thread would never block the OS.</li>
+<li>when you write coroutine code, you never call yiled directly. they are hide in the implementation of the blocking APIs</li>
+<li>the coroutine blocking API just keep the same interface as the std lib.</li>
+</ol>
+</aside></li>
+</ul>
+</section>
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="difference-with-generator">Difference with generator</h2>
+<ul>
+<li>coroutine is a special generator</li>
+<li>stackful coroutine can yield from any point directly to scheduler</li>
+<li>always yield a "kernel request"</li>
+<li>when resume the scheduler send back the result</li>
+<li>init with Coroutine Local Storage</li>
+</ul>
+<aside class="notes"><p>coroutine is a special gerator but far more beyond that. It need a scheduler to run properly.
+while generator yield to it's caller, coroutine yield directly to the scheduler. And is's always yiled a "kernel request".
+The "kernel request" means ask for the kernel to do something useful and after that resume later. e.g. when a event happned
+resume the coroutine back and process the event.
+And the scheduler will send back the kernel request's result. whether it's an Ok value or an Error.
+Last difference with generator is that courouine has local storage, but generator doesn't have one.</p>
+</aside></section>
+
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="user-and-kernel-model">user and kernel model</h2>
+<div style="text-align: center;"><img src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/coroutine_stack.png" style="background:none; border:none; box-shadow:none;"></div>
+<aside class="notes"><p>This is a picture that shows how the user and 
+kernel model works. First the scheduler is running in the kernel sapce 
+which is always
+in normal thread context. And the user space is the whole bunch of code 
+that your are writing when create a coroutinie. And in coroutines
+you can call generator. But it use a special yield function to return 
+back to the scheduler which we call it "co_yield". Note that this is
+different from the generator yiled. generator yield always return to 
+it's caller. courtouein yield always return to scheduler.</p>
+</aside></section>
+
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="the-kernel-request">the kernel request</h2>
+<ul>
+<li>coroutine signature<pre><code class="language-rust hljs"><span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">type</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">CoroutineImpl</span></span></span></span> = Generator&lt;<span class="hljs-symbol"><span class="hljs-symbol">'static</span></span>, EventResult, EventSubscriber&gt;;</code></pre>
+</li>
+<li>the kernel request<pre><code class="language-rust hljs"><span class="hljs-comment"><span class="hljs-comment">// APIs running after yield to scheduler</span></span>
+<span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">trait</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">EventSource</span></span></span></span> {
+  <span class="hljs-comment"><span class="hljs-comment">/// kernel handler of the event, got the coroutine instance back</span></span>
+  <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">fn</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">subscribe</span></span></span></span>(&amp;<span class="hljs-keyword"><span class="hljs-keyword">mut</span></span> <span class="hljs-keyword"><span class="hljs-keyword">self</span></span>, _c: CoroutineImpl);
+  <span class="hljs-comment"><span class="hljs-comment">/// after yield back process</span></span>
+  <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">fn</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">yield_back</span></span></span></span>(&amp;<span class="hljs-keyword"><span class="hljs-keyword">self</span></span>, cancel: &amp;<span class="hljs-symbol"><span class="hljs-symbol">'static</span></span> Cancel) {}
+}</code></pre>
+</li>
+<li>construct the kernel request on stack and yield out<aside class="notes"><p>Coroutine is just a static generator. It's return type is the kernel request called
+"EventSubscriber" which is just a thin wrapper for arbitory kernel request. And the pass in
+type is "EventReuslt". The real kernel request must implement the "EventSource" trait. which
+contains only two functions. The "subscribe" fuction will handle kernel request. usually register
+the coroutine handle to a subsystem. the "yield_back" function  will do some processing after resuming
+back. so we have a chance to deal with cancel logic here.
+The last thing about kernel request is that we construct them on stack and yield out their refs.</p>
+</aside></li>
+</ul>
+</section>
+
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="kernel-request-example">kernel request example</h2>
+<pre><code class="language-rust hljs"><span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">struct</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">Sleep</span></span></span></span> { dur: Duration }
+
+<span class="hljs-keyword"><span class="hljs-keyword">impl</span></span> EventSource <span class="hljs-keyword"><span class="hljs-keyword">for</span></span> Sleep {
+    <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">fn</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">subscribe</span></span></span></span>(&amp;<span class="hljs-keyword"><span class="hljs-keyword">mut</span></span> <span class="hljs-keyword"><span class="hljs-keyword">self</span></span>, co: CoroutineImpl) {
+        <span class="hljs-comment"><span class="hljs-comment">// put the coroutine into the timer list</span></span>
+        <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> sleep_co = Arc::new(AtomicOption::some(co));
+        get_scheduler().add_timer(<span class="hljs-keyword"><span class="hljs-keyword">self</span></span>.dur, sleep_co.clone());
+    }
+}
+
+<span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">fn</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">sleep</span></span></span></span>(dur: Duration) {
+    <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> sleeper = Sleep { dur };
+    yield_with(&amp;sleeper);
+}</code></pre>
+<aside class="notes"><p>Example of sleep API implmentation.</p>
+</aside></section>
+
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="uniform-coroutine-and-generator">uniform coroutine and generator</h2>
+<pre><code class="language-rust hljs">go!(|| {
+    <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> g = Gn::new_scoped(|<span class="hljs-keyword"><span class="hljs-keyword">mut</span></span> s| {
+        <span class="hljs-keyword"><span class="hljs-keyword">for</span></span> i <span class="hljs-keyword"><span class="hljs-keyword">in</span></span> <span class="hljs-number"><span class="hljs-number">0</span></span>..<span class="hljs-number"><span class="hljs-number">1000</span></span> {
+            <span class="hljs-comment"><span class="hljs-comment">// call coroutine API in generator, yield to scheduler</span></span>
+            coroutine::sleep(Duration::from_secs(<span class="hljs-number"><span class="hljs-number">1</span></span>));
+            <span class="hljs-comment"><span class="hljs-comment">// yield to caller</span></span>
+            s.yield_(i);
+        }
+        <span class="hljs-number"><span class="hljs-number">1000</span></span>
+    });
+
+    g.for_each(|v| { dbg!(v); });
+})
+.wait()</code></pre>
+<aside class="notes"><p>Example of calling generator in coroutine context and in generator context calling the
+blocking API. This is example will print 0 to 1000 every one sencode. Note that they will yield
+to different places. Also note that we don't need stream concept here. Just use the iterator pattern
+is ok.</p>
+</aside></section>
+			</section>
+
+			<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;" aria-hidden="true" class="future" hidden=""><h2 id="system-overview">system overview</h2>
+<div style="text-align: center;"><img src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/overview.png" style="background:none; border:none; box-shadow:none;"></div>
+<aside class="notes"><p>This is system overwiew of the croutine system. In the kernel space we have thread types of scheduler.
+The user space we support those blocking APIs. Io realtead, sync primitives. timer related, coroutine management APIs,
+blocking combination APIs and so on.</p>
+</aside></section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="io-sub-system">IO sub system</h2>
+<ul>
+<li>yield io kernel request</li>
+<li>every io kernel request has a timeout property</li>
+<li>running io related things only on io thread</li>
+<li>support TCP/UDP/Unix Socket/Windows Pipe<aside class="notes"><ol>
+<li>Io related APIs like socket read will yiled io kernel request.</li>
+<li>every IO kernel request has a timeout property.</li>
+<li>Those Io blocking coroutines will always schedule coroutine on the io scheduler thread.</li>
+<li>currently we support TCP/UDP/Pipe/Unix Socket.</li>
+</ol>
+</aside></li>
+</ul>
+</section>
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="the-eventloop">the eventloop</h2>
+<ul>
+<li>uniform io event loop (epoll/kqueue/IOCP)</li>
+<li>event mode: do the real io operation in user space after resume back</li>
+<li>completion mode: check the io result after resume back</li>
+<li>dispatch the io request on multiple io thread based on fd</li>
+<li>io timeout is managed in the eventloop thread<aside class="notes"><p>stackful coroutine not using mio</p>
+</aside></li>
+</ul>
+</section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="sync-primitive-sub-system">sync primitive sub system</h2>
+<ul>
+<li>yield blocker kernel request</li>
+<li>save the suspending coroutines within primitive internal queue</li>
+<li>scheduling the coroutines on normal scheduler with work stealing</li>
+<li>support Semphore/Mutex/RwLock/CondVar/SyncFlag/MPSC channel<aside class="notes"><p>For those sync primitive blokcing APIs we just yield bloker kernel request.
+Each sync primitive instance has it's own internal wait queue to save those suspending
+coroutines that are wait for it. 
+And those APIs will schedule the croutines in normal scheduler with work stealing.
+SyncFlag is something like Once</p>
+</aside></li>
+</ul>
+</section>
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="the-blocker">the blocker</h2>
+<ul>
+<li>all sync primitives are implemented based on blocker</li>
+<li>the blocker could return Timeout/Canceled/Ok</li>
+<li>the blocker support running in thread context</li>
+</ul>
+<pre><code class="language-rust hljs"><span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">enum</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">Parker</span></span></span></span> { Coroutine(Park), Thread(ThreadPark) }
+<span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">enum</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">ParkError</span></span></span></span> { Canceled, Timeout }
+<span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">struct</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">Blocker</span></span></span></span> { parker: Parker }
+
+<span class="hljs-keyword"><span class="hljs-keyword">impl</span></span> Blocker {
+    <span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">fn</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">park</span></span></span></span>(&amp;<span class="hljs-keyword"><span class="hljs-keyword">self</span></span>, timeout: <span class="hljs-built_in"><span class="hljs-built_in">Option</span></span>&lt;Duration&gt;) -&gt; <span class="hljs-built_in"><span class="hljs-built_in">Result</span></span>&lt;(), ParkError&gt; {...}
+    <span class="hljs-keyword"><span class="hljs-keyword">pub</span></span> <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">fn</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">unpark</span></span></span></span>(&amp;<span class="hljs-keyword"><span class="hljs-keyword">self</span></span>) {...}
+}</code></pre>
+<aside class="notes"><p>The blocker could return three states.
+the primitives can be cancelled with correct behavior.
+also the blocker support running in thread context. which means you can wait a mutex in
+a thread and release the mutex signal in a courontine.</p>
+</aside></section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="timer-management">timer management</h2>
+<ul>
+<li>running timer manager in a separate thread</li>
+<li>the timer request push to MPSC "priority queue"</li>
+<li>blocker/sleep would push timeout request to the priority queue</li>
+<li>when a timeout happened, throw the coroutine into global ready list<aside class="notes"><p>the priority queue is semi atomic. keep the interval mpsc list in binary heap.
+the same interval request will push to the same interval list. so we can quickly peek
+out which one is timed out first.</p>
+</aside></li>
+</ul>
+</section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="coroutine-cancellation">coroutine cancellation</h2>
+<ul>
+<li>we trigger a special panic when detect cancel</li>
+<li>the cancel panic would be caught and we have chance to mark the coroutine as cancelled</li>
+<li>can only detect cancel when switch from/to kernel</li>
+<li>the cancel panic would trigger stack unwind and may has bad side effect<pre><code class="language-rust hljs"><span class="hljs-keyword"><span class="hljs-keyword">let</span></span> j = go!(<span class="hljs-keyword"><span class="hljs-keyword">move</span></span> || {
+  coroutine::sleep(Duration::from_secs(<span class="hljs-number"><span class="hljs-number">1000000</span></span>);
+});
+<span class="hljs-keyword"><span class="hljs-keyword">unsafe</span></span> { j.coroutine().cancel() };
+<span class="hljs-built_in"><span class="hljs-built_in">assert!</span></span>(j.joint().is_err()); <span class="hljs-comment"><span class="hljs-comment">// Err(Cancel)</span></span></code></pre>
+<aside class="notes"><p>during running we have no way to stop the code in user space. This is different from real OS.</p>
+</aside></li>
+</ul>
+</section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="deal-with-contentions">Deal with contentions</h2>
+<ul>
+<li>user space and kernel space contention<ul>
+<li>sub system may run the coroutine while it's still in kernel processing</li>
+</ul>
+</li>
+<li>sub system contentions<ul>
+<li>io and cancel</li>
+<li>blocker timeout</li>
+<li>blocker cancel</li>
+</ul>
+</li>
+<li>sync primitive contentions<aside class="notes"><p>Once when a coroutine handle is registered to a subsystem, it may run immediatly
+on other thread. So we need to wait it's kernel processing done before we drop the
+kenel request on the stack.
+Cancel and timeout are other async events that will competing with the normal logic.
+Cancel io on windows need call the CancelIo system API.
+Timeout is another aysnc event. when it happened we must correctly process the sync primitive
+logic.
+Of course we have sync primitive contentions. processing them right is hard and tricky, involve
+a lot of atomic operations.</p>
+</aside></li>
+</ul>
+</section>
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="the-solutions">the solutions</h2>
+<ul>
+<li>user space and kernel space contention<ul>
+<li>Delay drop kernel request until the kernel <code>subscribe()</code> done</li>
+</ul>
+</li>
+<li>use lockless data structures<ul>
+<li>AtomicOption - only one sub system can grab the coroutine handle</li>
+<li>atomic queues - Mutex/Semphore queue</li>
+</ul>
+</li>
+<li>atomic event exchange algorithm<ul>
+<li>make sure event processed once and only once between event consumer and producer<aside class="notes"><p>use atoimc data structure from crossbeam.</p>
+</aside></li>
+</ul>
+</li>
+</ul>
+</section>
+				<section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 350px; display: none;"><h2 id="atomic-event-procecess">Atomic event procecess</h2>
+<ul>
+<li>the event consumer loop in a thread</li>
+</ul>
+<pre><code class="language-rust hljs"><span class="hljs-comment"><span class="hljs-comment">// try to consume the coroutine handle</span></span>
+<span class="hljs-keyword"><span class="hljs-keyword">while</span></span> <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> <span class="hljs-literal"><span class="hljs-literal">Some</span></span>(io_data) = event_selector.poll() {
+    <span class="hljs-keyword"><span class="hljs-keyword">if</span></span> <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> <span class="hljs-literal"><span class="hljs-literal">Some</span></span>(co) = io_data.co.take(Ordering::Acquire) {
+        <span class="hljs-comment"><span class="hljs-comment">// process the event in kernel</span></span>
+        ......
+        co.resume();
+    }}
+</code></pre>
+<ul>
+<li>the event producer in another thread</li>
+</ul>
+<pre><code class="language-rust hljs"><span class="hljs-comment"><span class="hljs-comment">// register the coroutine handle to io sub system</span></span>
+io_data.co.swap(co, Ordering::Release);
+<span class="hljs-comment"><span class="hljs-comment">// try to run the event process logic</span></span>
+<span class="hljs-keyword"><span class="hljs-keyword">if</span></span> <span class="hljs-keyword"><span class="hljs-keyword">let</span></span> <span class="hljs-literal"><span class="hljs-literal">Some</span></span>(co) = io_data.co.take(Ordering::Acquire) {
+    <span class="hljs-comment"><span class="hljs-comment">// process the event in kernel</span></span>
+    ......
+    <span class="hljs-keyword"><span class="hljs-keyword">return</span></span> co.resume(); }</code></pre>
+<aside class="notes"><p>explain the algorithm</p>
+</aside></section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="uniform-thread-and-coroutine">uniform thread and coroutine</h2>
+<ul>
+<li>we can detect the context when calling blocking API<ul>
+<li>if current context is thread root</li>
+<li>if current context has coroutine local storage</li>
+</ul>
+</li>
+<li>when we are calling blocking API in thread context it has the same effect as calling corresponding std API<aside class="notes"><p>blocking APIs are context awaring.</p>
+</aside></li>
+</ul>
+</section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="combine-blocking-logic">combine blocking logic</h2>
+<ul>
+<li><code>join!()</code> macro wait all things done<pre><code class="language-rust hljs"><span class="hljs-comment"><span class="hljs-comment">// ref scoped coroutines</span></span>
+join!(
+  rx1.recv().unwrap(),
+  mutex1.lock().unwrap(),
+);</code></pre>
+</li>
+<li><code>select!()</code> macro wait any thing done first and cancel others<pre><code class="language-rust hljs"><span class="hljs-comment"><span class="hljs-comment">// ref cqueue APIs</span></span>
+<span class="hljs-keyword"><span class="hljs-keyword">let</span></span> n = <span class="hljs-built_in"><span class="hljs-built_in">select!</span></span>(
+  x = rx1.recv().unwrap() =&gt; <span class="hljs-built_in"><span class="hljs-built_in">println!</span></span>(<span class="hljs-string"><span class="hljs-string">"got x={} first"</span></span>, x),
+  y = rx2.recv().unwrap() =&gt; <span class="hljs-built_in"><span class="hljs-built_in">println!</span></span>(<span class="hljs-string"><span class="hljs-string">"got y={} first"</span></span>, y),
+  _ = sleep(Duration::from_secs(<span class="hljs-number"><span class="hljs-number">1</span></span>)) =&gt; <span class="hljs-built_in"><span class="hljs-built_in">println!</span></span>(<span class="hljs-string"><span class="hljs-string">"timeout!"</span></span>),
+);</code></pre>
+<aside class="notes"><p>the select example shows if the two channle can receive a value within one second.</p>
+</aside></li>
+</ul>
+</section>
+			</section>
+
+			<section style="top: 350px; display: none;" aria-hidden="true" class="stack future" data-previous-indexv="0" hidden="">
+				<section data-markdown="" data-markdown-parsed="true" style="top: 350px; display: none;"><h2 id="difference-with-futures">difference with futures</h2>
+<ul>
+<li>The Good<ul>
+<li>intuitive to learn and use</li>
+<li>no need to mark with <code>async</code> and <code>await</code></li>
+<li>the APIs could be run within thread context</li>
+<li>the APIs are compatible with std and stable</li>
+</ul>
+</li>
+<li>The Bad<ul>
+<li>consume more memory</li>
+<li>context switching is not free</li>
+<li>more easily stack overflow<aside class="notes"><p>you should tune the stack usage of the application
+there are tools to show the stack usage</p>
+</aside></li>
+</ul>
+</li>
+</ul>
+</section>
+			</section>
+
+			<section data-background-iframe="https://www.techempower.com/benchmarks/#section=data-r17&amp;hw=cl&amp;test=plaintext" style="top: 350px; display: none;" aria-hidden="true" class="future" hidden="">
+				<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+					<p> CONCLUSION </p>
+					<p> - uniform generator and coroutine </p>
+					<p> - uniform thread and coroutine </p>
+					<p> - uniform linux/bsd/windows </p>
+					<p> - compatible API with std library </p>
+					<p> - intuitive usage and high performance </p>
+				</div>
+			</section>
+
+			<section style="text-align: center; top: 350px; display: none;" aria-hidden="true" class="future" hidden="">
+				<h1>Thanks</h1>
+				<p style="text-align: left;">
+					- <a href="https://https//github.com/Xudong-Huang/generator-rs">generator-rs</a> <br>
+					- <a href="https://github.com/Xudong-Huang/May">May</a>
+				</p>
+			</section>
+
+		</div>
+
+	<div class="backgrounds"><div class="slide-background present" style="display: block;" data-loaded="true"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: block;" data-loaded="true"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: block;" data-loaded="true"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;" data-loaded="true"><div class="slide-background-content"></div></div><div class="slide-background stack future" style="display: none;" data-loaded="true"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;" data-loaded="true"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background-content"></div><div class="slide-background present" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-background future" data-background-hash="0https://www.techempower.com/benchmarks/#section=data-r17&amp;hw=cl&amp;test=plaintextnullnullnullnullnull" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: block;" data-controls-layout="bottom-right" data-controls-back-arrows="faded"><button class="navigate-left" aria-label="previous slide" disabled="disabled"><div class="controls-arrow"></div></button><button class="navigate-right enabled" aria-label="next slide"><div class="controls-arrow"></div></button><button class="navigate-up" aria-label="above slide" disabled="disabled"><div class="controls-arrow"></div></button><button class="navigate-down" aria-label="below slide" disabled="disabled"><div class="controls-arrow"></div></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div><div class="pause-overlay"><button class="resume-button">Resume presentation</button></div><div style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);" id="aria-status-div" aria-live="polite" aria-atomic="true">
+				Stackful Coroutine in Rust
+				Another async story
+				
+					Created by Xudong-Huang 
+				
+				
+			</div><div id="searchinputdiv" class="searchdiv" style="position: absolute; top: 10px; right: 10px; z-index: 10; display: none;"><span><input id="searchinput" class="searchinput" style="vertical-align: top;" type="search"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJiSURBVHjatFZNaxNBGH5md+Mmu92NVdKDRipSAyqCghgQD4L4cRe86UUtAQ+eFCxoa4/25EXBFi8eBE+eRPoDhB6KgiiixdAPCEkx2pjvTXadd9yNsflwuyUDD/O+u8PzzDPvzOwyx3EwyCZhwG3gAkp7MnpjgbopjsltcD4gjuXZZKeAR348MYLYTm3LzOs/y3j3JTfZxgXWXmTuwPHIc4VmoOmv5IrI53+AO2DdHLjkDWQ3GoEEVFXtXQOvkSnPWcyUceviLhwbDYv8/XIVj97kse7TodLvZXxYxrPUHkQ1ufXs3FEdybEIxucySOesoNvUgWU1cP3MkCBfTFdw9fGaAMVmRELq7LBw2Q3/FaAxxWIRpw+ZIr/7IouPqzUBiqmdHAv7EuhRAwf1er2Vy4x1jW3b2d5Jfvu5IPp7l2LYbcgCFFNb+FoJ7oBqEAqFMPNqFcmEgVMJDfMT+1tvN0pNjERlMS6QA5pFOKxiKVPFhakPeL3It+WGJUDxt2wFR+JhzI7v5ctkd8DXOZAkCYYxhO+lKm4+Xfqz/rIixBuNBl7eOYzkQQNzqX249mRl6zUgEcYkaJrGhUwBinVdh6IouPzwE6/DL5w4oLkH8y981aDf+uq6hlKpJESiUdNfDZi7/ehG9K6KfiA3pml0PLcsq+cSMTj2NL9ukc4UOmz7AZ3+crkC4mHujFvXNaMFB3bEr8xPS6p5O+jXxq4VZtaen7/PwzrntjcLUE0iHPS1Ud1cdiEJl/8WivZk0wXd7zWOMkeF8s0CcAmkNrC2nvXZDbbbN73ccYnZoH9bfgswAFzAe9/h3dbKAAAAAElFTkSuQmCC" id="searchbutton" class="searchicon" style="vertical-align: top; margin-top: -1px;"></span></div></div>
+
+	<script src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/head.html"></script>
+	<script src="Stackful%20Coroutine%20Async%20Story%20in%20Rust_files/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'reveal.js/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+				{ src: 'reveal.js/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+				{ src: 'reveal.js/plugin/search/search.js', async: true },
+				{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+				{ src: 'reveal.js/plugin/notes/notes.js', async: true }
+			]
+		});
+
+	</script>
+
+
+
+</body></html>

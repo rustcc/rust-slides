@@ -1,0 +1,14 @@
+[package]
+name = "style"
+version = "0.1.0"
+authors = ["Xidorn Quan <me@upsuper.org>"]
+license = "MPL-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+style_derive = { path = "style_derive" }
+style_traits = { path = "style_traits" }
+
+[workspace]
+members = ["style_traits", "style_derive"]

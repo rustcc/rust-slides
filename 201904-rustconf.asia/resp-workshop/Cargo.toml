@@ -1,0 +1,21 @@
+[package]
+name = "resp"
+version = "0.1.0"
+authors = ["wayslog <zxs867179@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name="myresp"
+path="bin/main.rs"
+
+[dependencies]
+failure="0.1"
+bytes="0.4.12"
+btoi="0.4.1"
+
+[[bench]]
+name="resp_bench"
+harness = false
+
+[dev-dependencies]
+criterion = "0.2"

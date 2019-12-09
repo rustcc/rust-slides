@@ -1,0 +1,19 @@
+[package]
+name = "cwebp"
+version = "0.1.0"
+authors = ["Wangweizhen <wangweizhen@bilibili.com>"]
+edition = "2018"
+
+[dependencies]
+clap = "2.32.0"
+libwebp-sys = { path = "../libwebp-sys" }
+webp = { path = "../" }
+lodepng = "2.4.2"
+rgb = "0.8"
+libc = "0.2.48"
+
+[lib]
+name = "cwebp"
+
+[[bin]]
+name = "cwebp"

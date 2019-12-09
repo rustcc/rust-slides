@@ -1,0 +1,13 @@
+[package]
+name = "libwebp-sys"
+version = "0.1.0"
+authors = ["Wangweizhen <hawking.rei@gmail.com>"]
+edition = "2018"
+build = "build.rs"
+
+
+[build-dependencies]
+cmake = "0.1.38"
+bindgen = "0.49.0"
+pkg-config = "0.3.14"
+cc = "1.0.35"

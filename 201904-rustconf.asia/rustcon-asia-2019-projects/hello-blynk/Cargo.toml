@@ -1,0 +1,8 @@
+[package]
+name = "hello-blynk"
+version = "0.1.0"
+authors = ["rahul-thakoor <rahul.thakoor@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+reqwest = "0.9.15"

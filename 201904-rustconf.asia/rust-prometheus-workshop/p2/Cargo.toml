@@ -1,0 +1,8 @@
+[package]
+name = "p2"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+actix-web = "1.0.0-alpha"
+evmap = "4.2.2"
